@@ -22,7 +22,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **STALE-02**: Frequently-updated submodules (e.g., weekly) trigger yellow/red status sooner than rarely-updated ones (e.g., yearly)
 - [x] **STALE-03**: Staleness computation uses median inter-update interval (not mean) to resist outlier gaps
 - [x] **STALE-04**: Submodules with insufficient history (<5 updates) fall back to sensible default thresholds
-- [ ] **STALE-05**: Each submodule displays a green/yellow/red status badge based on its computed thresholds
+- [x] **STALE-05**: Each submodule displays a green/yellow/red status badge based on its computed thresholds
 
 ### Dashboard UI
 
@@ -87,7 +87,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STALE-02 | Phase 2 | Complete |
 | STALE-03 | Phase 2 | Complete |
 | STALE-04 | Phase 2 | Complete |
-| STALE-05 | Phase 2 | Pending |
+| STALE-05 | Phase 2 | Complete |
 | UI-01 | Phase 3 | Pending |
 | UI-02 | Phase 3 | Pending |
 | UI-03 | Phase 3 | Pending |
