@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Data Collection
 
-- [ ] **DATA-01**: Dashboard lists the top 10 sonic-net submodules (sonic-swss, sonic-utilities, sonic-platform-daemons, sonic-sairedis, sonic-gnmi, sonic-swss-common, sonic-platform-common, sonic-host-services, sonic-linux-kernel, sonic-dash-ha) with their path and current pinned commit SHA in sonic-buildimage
-- [ ] **DATA-02**: Dashboard shows commits-behind count for each submodule (pinned pointer vs upstream HEAD)
-- [ ] **DATA-03**: Dashboard shows days-behind for each submodule (time since pinned commit was authored)
-- [ ] **DATA-04**: Dashboard provides a direct link to the GitHub compare view (pinned_sha...HEAD) for each submodule
+- [x] **DATA-01**: Dashboard lists the top 10 sonic-net submodules (sonic-swss, sonic-utilities, sonic-platform-daemons, sonic-sairedis, sonic-gnmi, sonic-swss-common, sonic-platform-common, sonic-host-services, sonic-linux-kernel, sonic-dash-ha) with their path and current pinned commit SHA in sonic-buildimage
+- [x] **DATA-02**: Dashboard shows commits-behind count for each submodule (pinned pointer vs upstream HEAD)
+- [x] **DATA-03**: Dashboard shows days-behind for each submodule (time since pinned commit was authored)
+- [x] **DATA-04**: Dashboard provides a direct link to the GitHub compare view (pinned_sha...HEAD) for each submodule
 - [ ] **DATA-05**: Data collection correctly resolves each submodule's upstream default branch (not hardcoded to master/main)
 - [ ] **DATA-06**: Data collection handles .gitmodules parsing edge cases (name≠path mismatches, .git URL suffixes, empty paths)
 
@@ -77,10 +77,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
-| DATA-04 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
+| DATA-03 | Phase 1 | Complete |
+| DATA-04 | Phase 1 | Complete |
 | DATA-05 | Phase 1 | Pending |
 | DATA-06 | Phase 1 | Pending |
 | STALE-01 | Phase 2 | Pending |
