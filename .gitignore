@@ -1,0 +1,14 @@
+# Generated output
+site/
+data.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
