@@ -44,11 +44,11 @@ Plans:
   2. Thresholds are computed from median inter-update interval (not mean), resisting outlier gaps like holiday periods
   3. Submodules with fewer than 5 historical updates display sensible fallback thresholds instead of meaningless computed ones
   4. Each submodule displays a green, yellow, or red status badge based on its individually-computed thresholds
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md — Staleness module TDD (staleness.py: cadence computation, threshold derivation, classification)
+- [ ] 02-02-PLAN.md — Pipeline integration + badge display (collector.py wiring, dashboard.html status column)
 
 ### Phase 3: Dashboard UI
 **Goal**: Maintainers can assess project-wide submodule health in under 10 seconds from a polished dashboard
