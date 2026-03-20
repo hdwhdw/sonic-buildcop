@@ -7,7 +7,7 @@ import sys
 # Allow importing from scripts/ directory
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-from renderer import render_dashboard
+from renderer import render_dashboard, sort_submodules, compute_summary
 
 
 def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
@@ -137,3 +137,109 @@ def test_render_creates_site_directory(tmp_path):
     render_dashboard(data_path, site_dir)
     assert os.path.isdir(site_dir)
     assert os.path.isfile(os.path.join(site_dir, "index.html"))
+
+
+# --- Helpers for sort/summary tests ---
+
+
+def _make_sub(name, staleness_status, days_behind, status="ok"):
+    """Minimal submodule dict for sort/summary testing."""
+    return {
+        "name": name,
+        "path": f"src/{name}",
+        "url": f"https://github.com/sonic-net/{name}",
+        "pinned_sha": "abc123def4567890" if status == "ok" else None,
+        "branch": "master" if status == "ok" else None,
+        "commits_behind": 5 if status == "ok" else None,
+        "days_behind": days_behind,
+        "compare_url": f"https://github.com/sonic-net/{name}/compare/abc123...master" if status == "ok" else None,
+        "status": status,
+        "error": None if status == "ok" else "API error",
+        "staleness_status": staleness_status,
+        "median_days": None,
+        "commit_count_6m": None,
+        "thresholds": None,
+    }
+
+
+# --- sort_submodules tests ---
+
+
+def test_sort_red_before_yellow_before_green():
+    """sort_submodules orders red → yellow → green."""
+    subs = [
+        _make_sub("g", "green", 5),
+        _make_sub("r", "red", 50),
+        _make_sub("y", "yellow", 20),
+    ]
+    result = sort_submodules(subs)
+    assert [s["name"] for s in result] == ["r", "y", "g"]
+
+
+def test_sort_days_behind_descending_within_tier():
+    """Within the same tier, more days-behind appears first."""
+    subs = [
+        _make_sub("b", "yellow", 10),
+        _make_sub("a", "yellow", 30),
+    ]
+    result = sort_submodules(subs)
+    assert [s["name"] for s in result] == ["a", "b"]
+
+
+def test_sort_unavailable_last():
+    """Submodules with staleness_status=None sort after green."""
+    subs = [
+        _make_sub("unavail", None, None, status="unavailable"),
+        _make_sub("ok-green", "green", 1),
+    ]
+    result = sort_submodules(subs)
+    assert [s["name"] for s in result] == ["ok-green", "unavail"]
+
+
+def test_sort_empty_list():
+    """Empty input returns empty list."""
+    assert sort_submodules([]) == []
+
+
+def test_sort_does_not_mutate_input():
+    """sort_submodules returns a new list; original is unchanged."""
+    subs = [
+        _make_sub("g", "green", 5),
+        _make_sub("r", "red", 50),
+    ]
+    original = list(subs)
+    sort_submodules(subs)
+    assert subs == original
+
+
+# --- compute_summary tests ---
+
+
+def test_summary_format_mixed():
+    """Mixed statuses produce correct emoji-count string."""
+    subs = [
+        _make_sub("a", "green", 1),
+        _make_sub("b", "green", 2),
+        _make_sub("c", "yellow", 15),
+        _make_sub("d", "red", 60),
+    ]
+    assert compute_summary(subs) == "🟢 2 · 🟡 1 · 🔴 1"
+
+
+def test_summary_excludes_unavailable():
+    """Unavailable submodules (staleness_status=None) are not counted."""
+    subs = [
+        _make_sub("ok", "green", 1),
+        _make_sub("bad", None, None, status="unavailable"),
+    ]
+    assert compute_summary(subs) == "🟢 1 · 🟡 0 · 🔴 0"
+
+
+def test_summary_all_green():
+    """All-green input returns correct counts."""
+    subs = [
+        _make_sub("a", "green", 1),
+        _make_sub("b", "green", 2),
+        _make_sub("c", "green", 3),
+    ]
+    assert compute_summary(subs) == "🟢 3 · 🟡 0 · 🔴 0"
