@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 
 import requests
 
+from staleness import enrich_with_staleness
+
 TARGET_SUBMODULES = [
     "sonic-swss", "sonic-utilities", "sonic-platform-daemons",
     "sonic-sairedis", "sonic-gnmi", "sonic-swss-common",
@@ -220,6 +222,9 @@ def main():
         result = collect_submodule(session, submodule_def)
         results.append(result)
         time.sleep(0.5)  # Rate-limit courtesy delay
+
+    # Enrich with cadence-aware staleness classification
+    enrich_with_staleness(session, results)
 
     # Write output
     output = {
