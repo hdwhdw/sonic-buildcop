@@ -28,12 +28,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Each submodule has a clickable link to the correct GitHub compare view (pinned_sha...HEAD on the right branch)
   4. The GitHub Actions workflow runs on a daily cron schedule and can be triggered manually via workflow_dispatch
   5. If one submodule's data collection fails, the remaining submodules still appear on the deployed page
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md — Data collector with tests (collector.py: .gitmodules parsing, GitHub API, staleness computation)
+- [ ] 01-02-PLAN.md — HTML renderer + project config (renderer.py, Jinja2 template, requirements.txt, .gitignore)
+- [ ] 01-03-PLAN.md — CI/CD workflow + deployment verification (GitHub Actions daily cron + Pages deploy)
 
 ### Phase 2: Staleness Model
 **Goal**: Each submodule has cadence-aware staleness thresholds that distinguish urgently-stale from acceptably-behind
