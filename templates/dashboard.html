@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONiC Submodule Status</title>
+</head>
+<body>
+    <h1>SONiC Submodule Status</h1>
+    <p>Last updated: {{ generated_at }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Submodule</th>
+                <th>Path</th>
+                <th>Pinned SHA</th>
+                <th>Commits Behind</th>
+                <th>Days Behind</th>
+                <th>Compare</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sub in submodules %}
+            <tr>
+                <td>{{ sub.name }}</td>
+                <td>{{ sub.path }}</td>
+                <td>
+                    {% if sub.status == "ok" %}
+                        <code>{{ sub.pinned_sha[:7] }}</code>
+                    {% else %}
+                        <em>unavailable</em>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if sub.status == "ok" %}
+                        {{ sub.commits_behind }}
+                    {% else %}
+                        <em>{{ sub.error }}</em>
+                    {% endif %}
+                </td>
+                <td>{{ sub.days_behind if sub.status == "ok" else "—" }}</td>
+                <td>
+                    {% if sub.compare_url %}
+                        <a href="{{ sub.compare_url }}">View</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
