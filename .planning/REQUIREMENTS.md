@@ -13,8 +13,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **DATA-02**: Dashboard shows commits-behind count for each submodule (pinned pointer vs upstream HEAD)
 - [x] **DATA-03**: Dashboard shows days-behind for each submodule (time since pinned commit was authored)
 - [x] **DATA-04**: Dashboard provides a direct link to the GitHub compare view (pinned_sha...HEAD) for each submodule
-- [ ] **DATA-05**: Data collection correctly resolves each submodule's upstream default branch (not hardcoded to master/main)
-- [ ] **DATA-06**: Data collection handles .gitmodules parsing edge cases (name≠path mismatches, .git URL suffixes, empty paths)
+- [x] **DATA-05**: Data collection correctly resolves each submodule's upstream default branch (not hardcoded to master/main)
+- [x] **DATA-06**: Data collection handles .gitmodules parsing edge cases (name≠path mismatches, .git URL suffixes, empty paths)
 
 ### Staleness Model
 
@@ -38,7 +38,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **CICD-01**: GitHub Actions cron workflow runs daily to regenerate the dashboard
 - [ ] **CICD-02**: Workflow deploys updated dashboard to GitHub Pages automatically
 - [ ] **CICD-03**: Workflow stays within GitHub Actions free tier for public repos
-- [ ] **CICD-04**: Pipeline handles individual submodule failures gracefully (one failure doesn't break the whole dashboard)
+- [x] **CICD-04**: Pipeline handles individual submodule failures gracefully (one failure doesn't break the whole dashboard)
 - [ ] **CICD-05**: Workflow supports manual trigger (workflow_dispatch) for on-demand refresh
 
 ## v2 Requirements
@@ -81,8 +81,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
 | DATA-04 | Phase 1 | Complete |
-| DATA-05 | Phase 1 | Pending |
-| DATA-06 | Phase 1 | Pending |
+| DATA-05 | Phase 1 | Complete |
+| DATA-06 | Phase 1 | Complete |
 | STALE-01 | Phase 2 | Pending |
 | STALE-02 | Phase 2 | Pending |
 | STALE-03 | Phase 2 | Pending |
@@ -97,7 +97,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CICD-01 | Phase 1 | Pending |
 | CICD-02 | Phase 1 | Pending |
 | CICD-03 | Phase 1 | Pending |
-| CICD-04 | Phase 1 | Pending |
+| CICD-04 | Phase 1 | Complete |
 | CICD-05 | Phase 1 | Pending |
 
 **Coverage:**
