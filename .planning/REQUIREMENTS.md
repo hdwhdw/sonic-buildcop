@@ -1,0 +1,110 @@
+# Requirements: sonic-buildcop
+
+**Defined:** 2026-03-20
+**Core Value:** Make submodule staleness visible and actionable — so maintainers catch drift early instead of discovering months-old pointers during crunch time.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Data Collection
+
+- [ ] **DATA-01**: Dashboard lists the top 10 sonic-net submodules (sonic-swss, sonic-utilities, sonic-platform-daemons, sonic-sairedis, sonic-gnmi, sonic-swss-common, sonic-platform-common, sonic-host-services, sonic-linux-kernel, sonic-dash-ha) with their path and current pinned commit SHA in sonic-buildimage
+- [ ] **DATA-02**: Dashboard shows commits-behind count for each submodule (pinned pointer vs upstream HEAD)
+- [ ] **DATA-03**: Dashboard shows days-behind for each submodule (time since pinned commit was authored)
+- [ ] **DATA-04**: Dashboard provides a direct link to the GitHub compare view (pinned_sha...HEAD) for each submodule
+- [ ] **DATA-05**: Data collection correctly resolves each submodule's upstream default branch (not hardcoded to master/main)
+- [ ] **DATA-06**: Data collection handles .gitmodules parsing edge cases (name≠path mismatches, .git URL suffixes, empty paths)
+
+### Staleness Model
+
+- [ ] **STALE-01**: Staleness thresholds are auto-computed per submodule from historical update cadence in sonic-buildimage
+- [ ] **STALE-02**: Frequently-updated submodules (e.g., weekly) trigger yellow/red status sooner than rarely-updated ones (e.g., yearly)
+- [ ] **STALE-03**: Staleness computation uses median inter-update interval (not mean) to resist outlier gaps
+- [ ] **STALE-04**: Submodules with insufficient history (<5 updates) fall back to sensible default thresholds
+- [ ] **STALE-05**: Each submodule displays a green/yellow/red status badge based on its computed thresholds
+
+### Dashboard UI
+
+- [ ] **UI-01**: Dashboard displays a table with columns: submodule name, status badge, commits behind, days behind, link to compare view
+- [ ] **UI-02**: Table is sorted by staleness severity (worst-first) by default
+- [ ] **UI-03**: Dashboard shows a summary/aggregate view (e.g., "5 green, 3 yellow, 2 red")
+- [ ] **UI-04**: Dashboard shows a "last refreshed" timestamp so users know if the data itself is stale
+- [ ] **UI-05**: Dashboard has a responsive layout that works on laptop and monitor screens
+- [ ] **UI-06**: Dashboard is hosted as a static GitHub Pages site on hdwhdw/sonic-buildcop
+
+### CI/CD Pipeline
+
+- [ ] **CICD-01**: GitHub Actions cron workflow runs daily to regenerate the dashboard
+- [ ] **CICD-02**: Workflow deploys updated dashboard to GitHub Pages automatically
+- [ ] **CICD-03**: Workflow stays within GitHub Actions free tier for public repos
+- [ ] **CICD-04**: Pipeline handles individual submodule failures gracefully (one failure doesn't break the whole dashboard)
+- [ ] **CICD-05**: Workflow supports manual trigger (workflow_dispatch) for on-demand refresh
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Alerting
+
+- **ALERT-01**: GitHub Issues are created/updated for submodules that cross the red threshold
+- **ALERT-02**: Issues are auto-closed when the submodule pointer is updated
+- **ALERT-03**: Issues mention the team/owner from CODEOWNERS
+
+### Enhanced Dashboard
+
+- **DASH-01**: Team ownership grouping (parse CODEOWNERS, group submodules by team)
+- **DASH-02**: Historical staleness trend charts (Chart.js, requires accumulated daily snapshots)
+- **DASH-03**: Commit diff summary showing titles/authors of missed commits
+- **DASH-04**: JSON data endpoint for downstream consumers (scripts, bots, CI gates)
+- **DASH-05**: Update cadence visualization (sparklines showing each submodule's rhythm)
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Auto-updating submodule pointers | Observability ≠ automation; updates can break builds and need human review |
+| Tracking non-sonic-net submodules | Different ownership model and update expectations; dilutes signal |
+| Real-time / webhook-driven updates | Daily cron sufficient for measuring weeks/months of staleness; would require server |
+| Database backend | Violates GitHub Pages constraint; JSON snapshots in git sufficient for data volumes |
+| User accounts / authentication | Public dashboard for a public repo; zero value from auth |
+| Configuration UI in dashboard | Thresholds are auto-computed; manual overrides should be code-reviewed via YAML config |
+| PR creation for stale submodules | mssonicbld bot already does this; duplicating creates conflicts |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| DATA-01 | — | Pending |
+| DATA-02 | — | Pending |
+| DATA-03 | — | Pending |
+| DATA-04 | — | Pending |
+| DATA-05 | — | Pending |
+| DATA-06 | — | Pending |
+| STALE-01 | — | Pending |
+| STALE-02 | — | Pending |
+| STALE-03 | — | Pending |
+| STALE-04 | — | Pending |
+| STALE-05 | — | Pending |
+| UI-01 | — | Pending |
+| UI-02 | — | Pending |
+| UI-03 | — | Pending |
+| UI-04 | — | Pending |
+| UI-05 | — | Pending |
+| UI-06 | — | Pending |
+| CICD-01 | — | Pending |
+| CICD-02 | — | Pending |
+| CICD-03 | — | Pending |
+| CICD-04 | — | Pending |
+| CICD-05 | — | Pending |
+
+**Coverage:**
+- v1 requirements: 22 total
+- Mapped to phases: 0
+- Unmapped: 22 ⚠️
+
+---
+*Requirements defined: 2026-03-20*
+*Last updated: 2026-03-20 after initial definition*
