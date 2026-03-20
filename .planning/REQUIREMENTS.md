@@ -18,10 +18,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Staleness Model
 
-- [ ] **STALE-01**: Staleness thresholds are auto-computed per submodule from historical update cadence in sonic-buildimage
-- [ ] **STALE-02**: Frequently-updated submodules (e.g., weekly) trigger yellow/red status sooner than rarely-updated ones (e.g., yearly)
-- [ ] **STALE-03**: Staleness computation uses median inter-update interval (not mean) to resist outlier gaps
-- [ ] **STALE-04**: Submodules with insufficient history (<5 updates) fall back to sensible default thresholds
+- [x] **STALE-01**: Staleness thresholds are auto-computed per submodule from historical update cadence in sonic-buildimage
+- [x] **STALE-02**: Frequently-updated submodules (e.g., weekly) trigger yellow/red status sooner than rarely-updated ones (e.g., yearly)
+- [x] **STALE-03**: Staleness computation uses median inter-update interval (not mean) to resist outlier gaps
+- [x] **STALE-04**: Submodules with insufficient history (<5 updates) fall back to sensible default thresholds
 - [ ] **STALE-05**: Each submodule displays a green/yellow/red status badge based on its computed thresholds
 
 ### Dashboard UI
@@ -83,10 +83,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 1 | Complete |
 | DATA-05 | Phase 1 | Complete |
 | DATA-06 | Phase 1 | Complete |
-| STALE-01 | Phase 2 | Pending |
-| STALE-02 | Phase 2 | Pending |
-| STALE-03 | Phase 2 | Pending |
-| STALE-04 | Phase 2 | Pending |
+| STALE-01 | Phase 2 | Complete |
+| STALE-02 | Phase 2 | Complete |
+| STALE-03 | Phase 2 | Complete |
+| STALE-04 | Phase 2 | Complete |
 | STALE-05 | Phase 2 | Pending |
 | UI-01 | Phase 3 | Pending |
 | UI-02 | Phase 3 | Pending |
