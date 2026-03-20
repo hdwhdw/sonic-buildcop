@@ -248,6 +248,48 @@ def test_summary_all_green():
 # --- Integration test: sort order in rendered HTML ---
 
 
+def test_render_html_contains_summary_text(tmp_path):
+    """Rendered HTML displays the aggregate summary with emoji counts."""
+    subs = [
+        _make_sub("a", "green", 3),
+        _make_sub("b", "yellow", 20),
+        _make_sub("c", "red", 60),
+    ]
+    data = _make_data(submodules=subs)
+    html = _render(tmp_path, data)
+    assert "\U0001f7e2 1" in html   # 🟢 1
+    assert "\U0001f7e1 1" in html   # 🟡 1
+    assert "\U0001f534 1" in html   # 🔴 1
+
+
+def test_render_html_has_responsive_wrapper(tmp_path):
+    """Rendered HTML wraps table in overflow-x: auto container."""
+    html = _render(tmp_path)
+    assert "table-wrapper" in html
+    assert "overflow-x" in html
+
+
+def test_render_html_has_container(tmp_path):
+    """Rendered HTML has max-width container for readability."""
+    html = _render(tmp_path)
+    assert "container" in html
+    assert "max-width" in html
+
+
+def test_render_html_has_timestamp_class(tmp_path):
+    """Rendered HTML styles the timestamp with .timestamp class."""
+    html = _render(tmp_path)
+    assert 'class="timestamp"' in html
+    assert "2026-03-20T06:00:00Z" in html
+
+
+def test_render_html_preserves_all_columns(tmp_path):
+    """All 7 table columns from Phase 2 are present."""
+    html = _render(tmp_path)
+    for col in ["Submodule", "Status", "Path", "Pinned SHA", "Commits Behind", "Days Behind", "Compare"]:
+        assert f"<th>{col}</th>" in html
+
+
 def test_render_html_sorted_worst_first(tmp_path):
     """Rendered HTML table has submodules sorted: red → yellow → green → unavailable."""
     subs = [
