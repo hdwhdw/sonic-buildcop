@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SONiC Submodule Status</title>
+    <style>
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-green { background-color: #28a745; color: #fff; }
+        .badge-yellow { background-color: #ffc107; color: #333; }
+        .badge-red { background-color: #dc3545; color: #fff; }
+        .badge-unknown { background-color: #6c757d; color: #fff; }
+    </style>
 </head>
 <body>
     <h1>SONiC Submodule Status</h1>
@@ -12,6 +26,7 @@
         <thead>
             <tr>
                 <th>Submodule</th>
+                <th>Status</th>
                 <th>Path</th>
                 <th>Pinned SHA</th>
                 <th>Commits Behind</th>
@@ -23,6 +38,13 @@
             {% for sub in submodules %}
             <tr>
                 <td>{{ sub.name }}</td>
+                <td>
+                    {% if sub.staleness_status %}
+                        <span class="badge badge-{{ sub.staleness_status }}">{{ sub.staleness_status }}</span>
+                    {% else %}
+                        <span class="badge badge-unknown">—</span>
+                    {% endif %}
+                </td>
                 <td>{{ sub.path }}</td>
                 <td>
                     {% if sub.status == "ok" %}
