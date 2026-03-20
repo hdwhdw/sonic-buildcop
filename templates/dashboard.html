@@ -5,6 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SONiC Submodule Status</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #24292e;
+            background: #fff;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timestamp {
+            color: #586069;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .summary {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        th {
+            background: #f6f8fa;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #f6f8fa;
+        }
+
+        code {
+            background: #f1f3f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Badge styles — preserved from Phase 2 */
         .badge {
             display: inline-block;
             padding: 2px 8px;
@@ -20,57 +95,62 @@
     </style>
 </head>
 <body>
-    <h1>SONiC Submodule Status</h1>
-    <p>Last updated: {{ generated_at }}</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Submodule</th>
-                <th>Status</th>
-                <th>Path</th>
-                <th>Pinned SHA</th>
-                <th>Commits Behind</th>
-                <th>Days Behind</th>
-                <th>Compare</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for sub in submodules %}
-            <tr>
-                <td>{{ sub.name }}</td>
-                <td>
-                    {% if sub.staleness_status %}
-                        <span class="badge badge-{{ sub.staleness_status }}">{{ sub.staleness_status }}</span>
-                    {% else %}
-                        <span class="badge badge-unknown">—</span>
-                    {% endif %}
-                </td>
-                <td>{{ sub.path }}</td>
-                <td>
-                    {% if sub.status == "ok" %}
-                        <code>{{ sub.pinned_sha[:7] }}</code>
-                    {% else %}
-                        <em>unavailable</em>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if sub.status == "ok" %}
-                        {{ sub.commits_behind }}
-                    {% else %}
-                        <em>{{ sub.error }}</em>
-                    {% endif %}
-                </td>
-                <td>{{ sub.days_behind if sub.status == "ok" else "—" }}</td>
-                <td>
-                    {% if sub.compare_url %}
-                        <a href="{{ sub.compare_url }}">View</a>
-                    {% else %}
-                        —
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>SONiC Submodule Status</h1>
+        <p class="timestamp">Last updated: {{ generated_at }}</p>
+        <p class="summary">{{ summary_text }}</p>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Submodule</th>
+                        <th>Status</th>
+                        <th>Path</th>
+                        <th>Pinned SHA</th>
+                        <th>Commits Behind</th>
+                        <th>Days Behind</th>
+                        <th>Compare</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sub in submodules %}
+                    <tr>
+                        <td>{{ sub.name }}</td>
+                        <td>
+                            {% if sub.staleness_status %}
+                                <span class="badge badge-{{ sub.staleness_status }}">{{ sub.staleness_status }}</span>
+                            {% else %}
+                                <span class="badge badge-unknown">—</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ sub.path }}</td>
+                        <td>
+                            {% if sub.status == "ok" %}
+                                <code>{{ sub.pinned_sha[:7] }}</code>
+                            {% else %}
+                                <em>unavailable</em>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if sub.status == "ok" %}
+                                {{ sub.commits_behind }}
+                            {% else %}
+                                <em>{{ sub.error }}</em>
+                            {% endif %}
+                        </td>
+                        <td>{{ sub.days_behind if sub.status == "ok" else "—" }}</td>
+                        <td>
+                            {% if sub.compare_url %}
+                                <a href="{{ sub.compare_url }}">View</a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
