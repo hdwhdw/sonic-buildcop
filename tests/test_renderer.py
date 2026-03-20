@@ -243,3 +243,38 @@ def test_summary_all_green():
         _make_sub("c", "green", 3),
     ]
     assert compute_summary(subs) == "🟢 3 · 🟡 0 · 🔴 0"
+
+
+# --- Integration test: sort order in rendered HTML ---
+
+
+def test_render_html_sorted_worst_first(tmp_path):
+    """Rendered HTML table has submodules sorted: red → yellow → green → unavailable."""
+    subs = [
+        _make_sub("sub-green", "green", 3),
+        _make_sub("sub-red", "red", 60),
+        _make_sub("sub-yellow", "yellow", 20),
+        {
+            "name": "sub-unavail",
+            "path": "src/sub-unavail",
+            "url": "https://github.com/sonic-net/sub-unavail",
+            "pinned_sha": None,
+            "branch": None,
+            "commits_behind": None,
+            "days_behind": None,
+            "compare_url": None,
+            "status": "unavailable",
+            "error": "API error",
+            "staleness_status": None,
+            "median_days": None,
+            "commit_count_6m": None,
+            "thresholds": None,
+        },
+    ]
+    data = _make_data(submodules=subs)
+    html = _render(tmp_path, data)
+    red_pos = html.index("sub-red")
+    yellow_pos = html.index("sub-yellow")
+    green_pos = html.index("sub-green")
+    unavail_pos = html.index("sub-unavail")
+    assert red_pos < yellow_pos < green_pos < unavail_pos
