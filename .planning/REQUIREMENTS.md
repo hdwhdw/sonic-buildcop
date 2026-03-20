@@ -26,9 +26,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Dashboard UI
 
-- [ ] **UI-01**: Dashboard displays a table with columns: submodule name, status badge, commits behind, days behind, link to compare view
-- [ ] **UI-02**: Table is sorted by staleness severity (worst-first) by default
-- [ ] **UI-03**: Dashboard shows a summary/aggregate view (e.g., "5 green, 3 yellow, 2 red")
+- [x] **UI-01**: Dashboard displays a table with columns: submodule name, status badge, commits behind, days behind, link to compare view
+- [x] **UI-02**: Table is sorted by staleness severity (worst-first) by default
+- [x] **UI-03**: Dashboard shows a summary/aggregate view (e.g., "5 green, 3 yellow, 2 red")
 - [ ] **UI-04**: Dashboard shows a "last refreshed" timestamp so users know if the data itself is stale
 - [ ] **UI-05**: Dashboard has a responsive layout that works on laptop and monitor screens
 - [ ] **UI-06**: Dashboard is hosted as a static GitHub Pages site on hdwhdw/sonic-buildcop
@@ -88,9 +88,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STALE-03 | Phase 2 | Complete |
 | STALE-04 | Phase 2 | Complete |
 | STALE-05 | Phase 2 | Complete |
-| UI-01 | Phase 3 | Pending |
-| UI-02 | Phase 3 | Pending |
-| UI-03 | Phase 3 | Pending |
+| UI-01 | Phase 3 | Complete |
+| UI-02 | Phase 3 | Complete |
+| UI-03 | Phase 3 | Complete |
 | UI-04 | Phase 3 | Pending |
 | UI-05 | Phase 3 | Pending |
 | UI-06 | Phase 1 | Pending |
