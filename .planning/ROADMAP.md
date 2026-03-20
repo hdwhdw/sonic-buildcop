@@ -60,11 +60,11 @@ Plans:
   3. Dashboard shows an aggregate summary (e.g., "5 green, 3 yellow, 2 red") for instant project-wide health assessment
   4. Dashboard displays a "last refreshed" timestamp so users know if the data itself is stale
   5. Dashboard layout is responsive and readable on both laptop and wide monitor screens
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — Sort + summary Python logic with TDD tests (renderer.py: sort_submodules, compute_summary)
+- [ ] 03-02-PLAN.md — Template CSS polish, summary display, responsive layout (dashboard.html overhaul + integration tests)
 
 ## Progress
 
