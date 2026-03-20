@@ -126,3 +126,68 @@ def mock_repo_response():
         "default_branch": "master",
         "archived": False,
     }
+
+
+# ---------------------------------------------------------------------------
+# Phase 2: Staleness module fixtures
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def mock_commits_page_1():
+    """Page 1 of GitHub Commits API response — 5 commits, 1-day intervals."""
+    return [
+        {"commit": {"committer": {"date": "2025-08-01T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-02T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-03T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-04T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-05T10:00:00Z"}}},
+    ]
+
+
+@pytest.fixture
+def mock_commits_page_2():
+    """Page 2 of GitHub Commits API response — 3 more commits."""
+    return [
+        {"commit": {"committer": {"date": "2025-08-06T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-07T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-08T10:00:00Z"}}},
+    ]
+
+
+@pytest.fixture
+def sample_submodule_ok():
+    """A single submodule dict with status='ok' — input to enrich_with_staleness."""
+    return {
+        "name": "sonic-swss",
+        "path": "src/sonic-swss",
+        "url": "https://github.com/sonic-net/sonic-swss",
+        "owner": "sonic-net",
+        "repo": "sonic-swss",
+        "pinned_sha": "abc123def4567890abc123def4567890abc123de",
+        "branch": "master",
+        "commits_behind": 42,
+        "days_behind": 15,
+        "compare_url": "https://github.com/sonic-net/sonic-swss/compare/abc123...master",
+        "status": "ok",
+        "error": None,
+    }
+
+
+@pytest.fixture
+def sample_submodule_unavailable():
+    """A single submodule dict with status='unavailable'."""
+    return {
+        "name": "sonic-swss",
+        "path": "src/sonic-swss",
+        "url": "https://github.com/sonic-net/sonic-swss",
+        "owner": "sonic-net",
+        "repo": "sonic-swss",
+        "pinned_sha": None,
+        "branch": None,
+        "commits_behind": None,
+        "days_behind": None,
+        "compare_url": None,
+        "status": "unavailable",
+        "error": "API down",
+    }
