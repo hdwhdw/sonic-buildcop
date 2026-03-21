@@ -32,7 +32,7 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "staleness_status": "green",
                 "median_days": 1.5,
                 "commit_count_6m": 20,
-                "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False},
+                "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "is_fallback": False},
             },
             {
                 "name": "sonic-dash-ha",
@@ -127,7 +127,7 @@ def test_html_contains_pinned_sha_short(tmp_path):
             "staleness_status": "green",
             "median_days": 1.5,
             "commit_count_6m": 20,
-            "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False},
+            "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "is_fallback": False},
         }
     ])
     html = _render(tmp_path, data)
@@ -409,7 +409,7 @@ def test_render_html_shows_median_cadence(tmp_path):
     subs = [
         _make_sub("cadence-test", "green", 3,
                    median_days=2.5,
-                   thresholds={"yellow_days": 5.0, "red_days": 10.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False}),
+                   thresholds={"yellow_days": 5.0, "red_days": 10.0, "is_fallback": False}),
     ]
     data = _make_data(submodules=subs)
     html = _render(tmp_path, data)
@@ -421,7 +421,7 @@ def test_render_html_shows_thresholds(tmp_path):
     subs = [
         _make_sub("threshold-test", "green", 3,
                    median_days=2.5,
-                   thresholds={"yellow_days": 5.0, "red_days": 10.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False}),
+                   thresholds={"yellow_days": 5.0, "red_days": 10.0, "is_fallback": False}),
     ]
     data = _make_data(submodules=subs)
     html = _render(tmp_path, data)

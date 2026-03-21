@@ -81,13 +81,11 @@ def test_compute_cadence_minimum_floor():
 
 
 def test_compute_thresholds_from_cadence():
-    """median_days=2.0 → yellow_days=4.0, red_days=8.0, yellow_commits=2, red_commits=4."""
+    """median_days=2.0 → yellow_days=4.0, red_days=8.0."""
     cadence = {"median_days": 2.0, "commit_count": 10, "is_fallback": False}
     result = compute_thresholds(cadence)
     assert result["yellow_days"] == 4.0
     assert result["red_days"] == 8.0
-    assert result["yellow_commits"] == 2
-    assert result["red_commits"] == 4
     assert result["is_fallback"] is False
 
 
@@ -113,8 +111,6 @@ def test_compute_thresholds_fallback():
     result = compute_thresholds(cadence)
     assert result["yellow_days"] == 30
     assert result["red_days"] == 60
-    assert result["yellow_commits"] == 10
-    assert result["red_commits"] == 20
     assert result["is_fallback"] is True
 
 
@@ -124,63 +120,21 @@ def test_compute_thresholds_fallback():
 
 
 def test_classify_green():
-    """days=1, commits=1, thresholds with yellow_days=4, red_days=8 → green."""
-    thresholds = {
-        "yellow_days": 4.0, "red_days": 8.0,
-        "yellow_commits": 2, "red_commits": 4,
-        "is_fallback": False,
-    }
-    assert classify(1, 1, thresholds) == "green"
+    """days=1 < yellow_days=4 → green."""
+    thresholds = {"yellow_days": 4.0, "red_days": 8.0, "is_fallback": False}
+    assert classify(1, thresholds) == "green"
 
 
 def test_classify_yellow_by_days():
-    """days=5 > yellow_days=4.0, commits=0 → yellow."""
-    thresholds = {
-        "yellow_days": 4.0, "red_days": 8.0,
-        "yellow_commits": 2, "red_commits": 4,
-        "is_fallback": False,
-    }
-    assert classify(5, 0, thresholds) == "yellow"
-
-
-def test_classify_yellow_by_commits():
-    """days=0, commits=3 > yellow_commits=2 → yellow."""
-    thresholds = {
-        "yellow_days": 4.0, "red_days": 8.0,
-        "yellow_commits": 2, "red_commits": 4,
-        "is_fallback": False,
-    }
-    assert classify(0, 3, thresholds) == "yellow"
+    """days=5 > yellow_days=4.0 → yellow."""
+    thresholds = {"yellow_days": 4.0, "red_days": 8.0, "is_fallback": False}
+    assert classify(5, thresholds) == "yellow"
 
 
 def test_classify_red_by_days():
-    """days=10 > red_days=8.0, commits=0 → red."""
-    thresholds = {
-        "yellow_days": 4.0, "red_days": 8.0,
-        "yellow_commits": 2, "red_commits": 4,
-        "is_fallback": False,
-    }
-    assert classify(10, 0, thresholds) == "red"
-
-
-def test_classify_red_by_commits():
-    """days=0, commits=5 > red_commits=4 → red."""
-    thresholds = {
-        "yellow_days": 4.0, "red_days": 8.0,
-        "yellow_commits": 2, "red_commits": 4,
-        "is_fallback": False,
-    }
-    assert classify(0, 5, thresholds) == "red"
-
-
-def test_classify_worst_of_rule():
-    """days=5 (yellow), commits=5 (red) → red (worst wins)."""
-    thresholds = {
-        "yellow_days": 4.0, "red_days": 8.0,
-        "yellow_commits": 2, "red_commits": 4,
-        "is_fallback": False,
-    }
-    assert classify(5, 5, thresholds) == "red"
+    """days=10 > red_days=8.0 → red."""
+    thresholds = {"yellow_days": 4.0, "red_days": 8.0, "is_fallback": False}
+    assert classify(10, thresholds) == "red"
 
 
 # ---------------------------------------------------------------------------

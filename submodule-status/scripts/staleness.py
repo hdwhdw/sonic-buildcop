@@ -27,8 +27,6 @@ MAX_PAGES = 10
 FALLBACK_THRESHOLDS = {
     "yellow_days": 30,
     "red_days": 60,
-    "yellow_commits": 10,
-    "red_commits": 20,
     "is_fallback": True,
 }
 
@@ -114,45 +112,32 @@ def compute_cadence(commit_dates: list[datetime]) -> dict:
 
 
 def compute_thresholds(cadence: dict) -> dict:
-    """Derive yellow/red thresholds from cadence data.
+    """Derive yellow/red day thresholds from cadence data.
 
     For normal repos: 2× median = yellow, 4× median = red (days).
-    Fixed commit thresholds: yellow=2, red=4 commits behind.
     For fallback repos (<5 commits): use FALLBACK_THRESHOLDS.
     """
     if cadence["is_fallback"]:
-        return dict(FALLBACK_THRESHOLDS)  # Return a copy
+        return dict(FALLBACK_THRESHOLDS)
 
     m = cadence["median_days"]
     return {
         "yellow_days": round(2 * m, 1),
         "red_days": round(4 * m, 1),
-        "yellow_commits": 2,
-        "red_commits": 4,
         "is_fallback": False,
     }
 
 
-def classify(days_behind: int, commits_behind: int, thresholds: dict) -> str:
-    """Classify staleness as green/yellow/red using worst-of rule.
+def classify(days_behind: float, thresholds: dict) -> str:
+    """Classify staleness as green/yellow/red based on days behind only.
 
-    Evaluates both days-behind and commits-behind against thresholds.
-    The worse signal determines the final classification.
+    Commits behind is shown for reference but does not affect classification.
     """
-    def _level(value, yellow_thresh, red_thresh):
-        if value > red_thresh:
-            return 2
-        if value > yellow_thresh:
-            return 1
-        return 0
-
-    day_level = _level(days_behind, thresholds["yellow_days"], thresholds["red_days"])
-    commit_level = _level(
-        commits_behind, thresholds["yellow_commits"], thresholds["red_commits"]
-    )
-
-    worst = max(day_level, commit_level)
-    return ["green", "yellow", "red"][worst]
+    if days_behind > thresholds["red_days"]:
+        return "red"
+    if days_behind > thresholds["yellow_days"]:
+        return "yellow"
+    return "green"
 
 
 def enrich_with_staleness(
@@ -184,9 +169,7 @@ def enrich_with_staleness(
             )
             cadence = compute_cadence(dates)
             thresholds = compute_thresholds(cadence)
-            status = classify(
-                sub["days_behind"], sub["commits_behind"], thresholds
-            )
+            status = classify(sub["days_behind"], thresholds)
 
             sub["staleness_status"] = status
             sub["median_days"] = cadence["median_days"]
