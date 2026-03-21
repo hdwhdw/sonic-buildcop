@@ -48,22 +48,24 @@ Deferred to next milestone:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VIS-01 | TBD | Pending |
-| VIS-02 | TBD | Pending |
-| VIS-03 | TBD | Pending |
-| VIS-04 | TBD | Pending |
-| LINK-01 | TBD | Pending |
-| LINK-02 | TBD | Pending |
-| LINK-03 | TBD | Pending |
-| LINK-04 | TBD | Pending |
-| DATA-07 | TBD | Pending |
-| DATA-08 | TBD | Pending |
-| DATA-09 | TBD | Pending |
-| DATA-10 | TBD | Pending |
+| VIS-01 | Phase 5 | Pending |
+| VIS-02 | Phase 5 | Pending |
+| VIS-03 | Phase 5 | Pending |
+| VIS-04 | Phase 5 | Pending |
+| LINK-01 | Phase 5 | Pending |
+| LINK-02 | Phase 5 | Pending |
+| LINK-03 | Phase 5 | Pending |
+| LINK-04 | Phase 5 | Pending |
+| DATA-07 | Phase 4 | Pending |
+| DATA-08 | Phase 4 | Pending |
+| DATA-09 | Phase 4 | Pending |
+| DATA-10 | Phase 4 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 12 total
-- Mapped to phases: 0 (pending roadmap)
+- Mapped to phases: 12/12 ✓
+  - Phase 4: 4 requirements (DATA-07, DATA-08, DATA-09, DATA-10)
+  - Phase 5: 8 requirements (VIS-01..04, LINK-01..04)
 
 ---
 *Requirements defined: 2026-03-21*
