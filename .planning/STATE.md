@@ -48,6 +48,7 @@ Progress: [████████████████░░░░] 80% (Ph
 | 2. Staleness Model | 2 | — | — |
 | 3. Dashboard UI | 2 | — | — |
 | Phase 04-data-expansion P01 | 3min | 2 tasks | 3 files |
+| Phase 04-data-expansion P02 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -61,6 +62,7 @@ Recent decisions affecting current work:
 - [v1.0] Inline CSS only, no external frameworks
 - [v1.1] DATA-09 (expand to 31 submodules) drives Phase 4 — collector change before template changes
 - [Phase 04-data-expansion]: Filter by owner == REPO_OWNER instead of hardcoded TARGET_SUBMODULES list
+- [Phase 04-data-expansion]: Relative timestamps with integer division buckets; thresholds as 'Xd / Xd' format
 
 ### Blockers/Concerns
 
@@ -68,6 +70,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-21T05:34:30.587Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-21
+Stopped at: Completed 04-02-PLAN.md — Phase 4 complete
 Resume file: None

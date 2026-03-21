@@ -23,10 +23,10 @@ Requirements for Dashboard Polish milestone. Builds on v1.0's functional dashboa
 
 ### Data Enrichment
 
-- [ ] **DATA-07**: Display median cadence column (e.g., "~1.2 days") per submodule
-- [ ] **DATA-08**: Display threshold values (e.g., "yellow: 2d / red: 5d") per submodule
+- [x] **DATA-07**: Display median cadence column (e.g., "~1.2 days") per submodule
+- [x] **DATA-08**: Display threshold values (e.g., "yellow: 2d / red: 5d") per submodule
 - [x] **DATA-09**: Expand from 10 to all 31 sonic-net submodules
-- [ ] **DATA-10**: Human-friendly "last updated" timestamp (e.g., "3 hours ago" instead of ISO 8601)
+- [x] **DATA-10**: Human-friendly "last updated" timestamp (e.g., "3 hours ago" instead of ISO 8601)
 
 ## Future Requirements
 
@@ -56,10 +56,10 @@ Deferred to next milestone:
 | LINK-02 | Phase 5 | Pending |
 | LINK-03 | Phase 5 | Pending |
 | LINK-04 | Phase 5 | Pending |
-| DATA-07 | Phase 4 | Pending |
-| DATA-08 | Phase 4 | Pending |
+| DATA-07 | Phase 4 | Complete |
+| DATA-08 | Phase 4 | Complete |
 | DATA-09 | Phase 4 | Complete |
-| DATA-10 | Phase 4 | Pending |
+| DATA-10 | Phase 4 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 12 total
