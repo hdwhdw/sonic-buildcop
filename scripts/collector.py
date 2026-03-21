@@ -10,13 +10,6 @@ import requests
 
 from staleness import enrich_with_staleness
 
-TARGET_SUBMODULES = [
-    "sonic-swss", "sonic-utilities", "sonic-platform-daemons",
-    "sonic-sairedis", "sonic-gnmi", "sonic-swss-common",
-    "sonic-platform-common", "sonic-host-services",
-    "sonic-linux-kernel", "sonic-dash-ha",
-]
-
 REPO_OWNER = "sonic-net"
 PARENT_REPO = "sonic-buildimage"
 API_BASE = "https://api.github.com"
@@ -28,7 +21,7 @@ def parse_gitmodules(content: str) -> list[dict]:
     Uses configparser to parse the INI-like format.  Normalises URLs by
     stripping trailing ``.git`` suffixes (via ``str.removesuffix`` — NOT
     ``rstrip`` which would mangle names like ``sonic-gnmi``).  Filters to
-    only those repos whose slug is in TARGET_SUBMODULES.
+    only those repos owned by REPO_OWNER (sonic-net).
     """
     parser = configparser.ConfigParser()
     parser.read_string(content)
@@ -53,8 +46,8 @@ def parse_gitmodules(content: str) -> list[dict]:
         else:
             continue
 
-        # Filter to target submodules by repo slug
-        if repo_slug in TARGET_SUBMODULES:
+        # Filter to sonic-net owned submodules
+        if owner == REPO_OWNER:
             submodules.append({
                 "name": repo_slug,
                 "path": path,
