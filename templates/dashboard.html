@@ -23,7 +23,7 @@
         h1 {
             font-size: 1.5em;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .timestamp {
@@ -34,7 +34,7 @@
 
         .summary {
             font-size: 1.1em;
-            margin-bottom: 20px;
+            margin-bottom: 0;
         }
 
         .table-wrapper {
@@ -43,14 +43,19 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             font-size: 0.9em;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            overflow: hidden;
         }
 
         th, td {
             padding: 8px 12px;
             text-align: left;
             border-bottom: 1px solid #e1e4e8;
+            vertical-align: middle;
         }
 
         th {
@@ -82,11 +87,10 @@
         /* Badge styles — preserved from Phase 2 */
         .badge {
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 2px 10px;
+            border-radius: 12px;
             font-size: 0.85em;
             font-weight: 600;
-            text-transform: uppercase;
         }
         .badge-green { background-color: #28a745; color: #fff; }
         .badge-yellow { background-color: #ffc107; color: #333; }
@@ -104,6 +108,51 @@
             border-top: 1px solid #e1e4e8;
             font-size: 0.85em;
             color: #586069;
+        }
+        header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #0d1117;
+                color: #c9d1d9;
+            }
+            a {
+                color: #58a6ff;
+            }
+            th {
+                background: #161b22;
+            }
+            th, td {
+                border-bottom-color: #30363d;
+            }
+            table {
+                border-color: #30363d;
+            }
+            tbody tr:hover {
+                background: #161b22;
+            }
+            code {
+                background: #21262d;
+                color: #c9d1d9;
+            }
+            header {
+                border-bottom-color: #30363d;
+            }
+            footer {
+                border-top-color: #30363d;
+                color: #8b949e;
+            }
+            .timestamp, .description {
+                color: #8b949e;
+            }
+            /* Badge dark mode — slightly muted backgrounds for less eye strain */
+            .badge-green { background-color: #238636; color: #fff; }
+            .badge-yellow { background-color: #d29922; color: #fff; }
+            .badge-red { background-color: #da3633; color: #fff; }
+            .badge-unknown { background-color: #484f58; color: #c9d1d9; }
         }
     </style>
 </head>
@@ -135,7 +184,7 @@
                         <td><a href="{{ sub.url }}">{{ sub.name }}</a></td>
                         <td>
                             {% if sub.staleness_status %}
-                                <span class="badge badge-{{ sub.staleness_status }}">{{ sub.staleness_status }}</span>
+                                <span class="badge badge-{{ sub.staleness_status }}">● {{ sub.staleness_status | capitalize }}</span>
                             {% else %}
                                 <span class="badge badge-unknown">—</span>
                             {% endif %}
