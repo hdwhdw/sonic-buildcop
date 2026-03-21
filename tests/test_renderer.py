@@ -8,6 +8,8 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 from renderer import render_dashboard, sort_submodules, compute_summary
+from datetime import datetime, timezone
+from renderer import format_relative_time
 
 
 def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
@@ -25,6 +27,10 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "compare_url": "https://github.com/sonic-net/sonic-swss/compare/c20ded7...master",
                 "status": "ok",
                 "error": None,
+                "staleness_status": "green",
+                "median_days": 1.5,
+                "commit_count_6m": 20,
+                "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False},
             },
             {
                 "name": "sonic-dash-ha",
@@ -37,6 +43,10 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "compare_url": None,
                 "status": "unavailable",
                 "error": "API returned 403 after 3 retries",
+                "staleness_status": None,
+                "median_days": None,
+                "commit_count_6m": None,
+                "thresholds": None,
             },
         ]
     return {"generated_at": generated_at, "submodules": submodules}
@@ -76,13 +86,16 @@ def test_render_creates_nojekyll(tmp_path):
 
 
 def test_html_contains_table_headers(tmp_path):
-    """HTML output contains all 6 table column headers."""
+    """HTML output contains all 9 table column headers."""
     html = _render(tmp_path)
     assert "<th>Submodule</th>" in html
+    assert "<th>Status</th>" in html
     assert "<th>Path</th>" in html
     assert "<th>Pinned SHA</th>" in html
     assert "<th>Commits Behind</th>" in html
     assert "<th>Days Behind</th>" in html
+    assert "<th>Median Cadence</th>" in html
+    assert "<th>Thresholds</th>" in html
     assert "<th>Compare</th>" in html
 
 
@@ -106,6 +119,10 @@ def test_html_contains_pinned_sha_short(tmp_path):
             "compare_url": "https://github.com/test/test-sub/compare/abc123d...master",
             "status": "ok",
             "error": None,
+            "staleness_status": "green",
+            "median_days": 1.5,
+            "commit_count_6m": 20,
+            "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False},
         }
     ])
     html = _render(tmp_path, data)
@@ -125,9 +142,10 @@ def test_html_shows_unavailable_submodule(tmp_path):
 
 
 def test_html_contains_generated_at(tmp_path):
-    """HTML output contains the generated_at timestamp."""
+    """HTML output contains the generated_at timestamp in a <time> element."""
     html = _render(tmp_path)
-    assert "2026-03-20T06:00:00Z" in html
+    assert "<time" in html
+    assert 'datetime="2026-03-20T06:00:00Z"' in html
 
 
 def test_render_creates_site_directory(tmp_path):
@@ -142,7 +160,7 @@ def test_render_creates_site_directory(tmp_path):
 # --- Helpers for sort/summary tests ---
 
 
-def _make_sub(name, staleness_status, days_behind, status="ok"):
+def _make_sub(name, staleness_status, days_behind, status="ok", median_days=None, thresholds=None):
     """Minimal submodule dict for sort/summary testing."""
     return {
         "name": name,
@@ -156,9 +174,9 @@ def _make_sub(name, staleness_status, days_behind, status="ok"):
         "status": status,
         "error": None if status == "ok" else "API error",
         "staleness_status": staleness_status,
-        "median_days": None,
+        "median_days": median_days,
         "commit_count_6m": None,
-        "thresholds": None,
+        "thresholds": thresholds,
     }
 
 
@@ -284,9 +302,9 @@ def test_render_html_has_timestamp_class(tmp_path):
 
 
 def test_render_html_preserves_all_columns(tmp_path):
-    """All 7 table columns from Phase 2 are present."""
+    """All 9 table columns are present."""
     html = _render(tmp_path)
-    for col in ["Submodule", "Status", "Path", "Pinned SHA", "Commits Behind", "Days Behind", "Compare"]:
+    for col in ["Submodule", "Status", "Path", "Pinned SHA", "Commits Behind", "Days Behind", "Median Cadence", "Thresholds", "Compare"]:
         assert f"<th>{col}</th>" in html
 
 
@@ -320,3 +338,94 @@ def test_render_html_sorted_worst_first(tmp_path):
     green_pos = html.index("sub-green")
     unavail_pos = html.index("sub-unavail")
     assert red_pos < yellow_pos < green_pos < unavail_pos
+
+
+# --- format_relative_time tests ---
+
+
+def test_format_relative_time_just_now():
+    """Timestamps less than 60 seconds ago return 'just now'."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-20T11:59:30Z", now=now) == "just now"
+
+
+def test_format_relative_time_minutes():
+    """Timestamps a few minutes ago return 'N minutes ago'."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-20T11:55:00Z", now=now) == "5 minutes ago"
+
+
+def test_format_relative_time_singular_minute():
+    """Exactly 1 minute ago returns '1 minute ago' (singular)."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-20T11:59:00Z", now=now) == "1 minute ago"
+
+
+def test_format_relative_time_hours():
+    """Timestamps a few hours ago return 'N hours ago'."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-20T09:00:00Z", now=now) == "3 hours ago"
+
+
+def test_format_relative_time_singular_hour():
+    """Exactly 1 hour ago returns '1 hour ago' (singular)."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-20T11:00:00Z", now=now) == "1 hour ago"
+
+
+def test_format_relative_time_days():
+    """Timestamps days ago return 'N days ago'."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-17T12:00:00Z", now=now) == "3 days ago"
+
+
+def test_format_relative_time_singular_day():
+    """Exactly 1 day ago returns '1 day ago' (singular)."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    assert format_relative_time("2026-03-19T12:00:00Z", now=now) == "1 day ago"
+
+
+def test_format_relative_time_z_suffix():
+    """Timestamps with 'Z' suffix are handled correctly."""
+    now = datetime(2026, 3, 20, 12, 0, 0, tzinfo=timezone.utc)
+    result = format_relative_time("2026-03-20T10:00:00Z", now=now)
+    assert result == "2 hours ago"
+
+
+# --- New column rendering tests ---
+
+
+def test_render_html_shows_median_cadence(tmp_path):
+    """HTML shows formatted median cadence for submodules with data."""
+    subs = [
+        _make_sub("cadence-test", "green", 3,
+                   median_days=2.5,
+                   thresholds={"yellow_days": 5.0, "red_days": 10.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False}),
+    ]
+    data = _make_data(submodules=subs)
+    html = _render(tmp_path, data)
+    assert "~2.5 days" in html
+
+
+def test_render_html_shows_thresholds(tmp_path):
+    """HTML shows formatted threshold values for submodules with data."""
+    subs = [
+        _make_sub("threshold-test", "green", 3,
+                   median_days=2.5,
+                   thresholds={"yellow_days": 5.0, "red_days": 10.0, "yellow_commits": 2, "red_commits": 4, "is_fallback": False}),
+    ]
+    data = _make_data(submodules=subs)
+    html = _render(tmp_path, data)
+    assert "5d / 10d" in html
+
+
+def test_render_html_unavailable_shows_dashes_in_cadence_columns(tmp_path):
+    """Unavailable submodules show dashes in median cadence and thresholds columns."""
+    subs = [
+        _make_sub("unavail", None, None, status="unavailable"),
+    ]
+    data = _make_data(submodules=subs)
+    html = _render(tmp_path, data)
+    # The HTML should contain dash characters for both new columns
+    # Count occurrences of "—" — should have at least 3 (days_behind + median_cadence + thresholds)
+    assert html.count("—") >= 3

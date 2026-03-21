@@ -2,6 +2,7 @@
 
 import json
 import os
+from datetime import datetime, timezone
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -38,6 +39,34 @@ def compute_summary(submodules: list[dict]) -> str:
     return f"\U0001f7e2 {counts['green']} \u00b7 \U0001f7e1 {counts['yellow']} \u00b7 \U0001f534 {counts['red']}"
 
 
+def format_relative_time(iso_timestamp: str, now: datetime | None = None) -> str:
+    """Convert an ISO 8601 timestamp to a human-friendly relative string.
+
+    Examples: "just now", "3 minutes ago", "1 hour ago", "5 days ago".
+    Accepts timestamps with 'Z' suffix or '+00:00' UTC offset.
+    """
+    if now is None:
+        now = datetime.now(timezone.utc)
+    # Handle 'Z' suffix that fromisoformat doesn't accept in Python <3.11
+    cleaned = iso_timestamp.replace("Z", "+00:00")
+    then = datetime.fromisoformat(cleaned)
+    delta = now - then
+    total_seconds = int(delta.total_seconds())
+    if total_seconds < 60:
+        return "just now"
+    minutes = total_seconds // 60
+    if minutes < 60:
+        unit = "minute" if minutes == 1 else "minutes"
+        return f"{minutes} {unit} ago"
+    hours = minutes // 60
+    if hours < 24:
+        unit = "hour" if hours == 1 else "hours"
+        return f"{hours} {unit} ago"
+    days = hours // 24
+    unit = "day" if days == 1 else "days"
+    return f"{days} {unit} ago"
+
+
 def render_dashboard(data_path: str, site_dir: str) -> None:
     """Read data.json, render HTML template, write to site_dir/index.html."""
     # Load data
@@ -53,9 +82,13 @@ def render_dashboard(data_path: str, site_dir: str) -> None:
     sorted_subs = sort_submodules(data["submodules"])
     summary_text = compute_summary(data["submodules"])
 
+    # Compute relative timestamp
+    generated_at_relative = format_relative_time(data["generated_at"])
+
     # Render
     html = template.render(
         generated_at=data["generated_at"],
+        generated_at_relative=generated_at_relative,
         submodules=sorted_subs,
         summary_text=summary_text,
     )

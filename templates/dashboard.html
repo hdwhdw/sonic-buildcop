@@ -97,7 +97,7 @@
 <body>
     <div class="container">
         <h1>SONiC Submodule Status</h1>
-        <p class="timestamp">Last updated: {{ generated_at }}</p>
+        <p class="timestamp">Last updated: <time datetime="{{ generated_at }}">{{ generated_at_relative }}</time></p>
         <p class="summary">{{ summary_text }}</p>
         <div class="table-wrapper">
             <table>
@@ -109,6 +109,8 @@
                         <th>Pinned SHA</th>
                         <th>Commits Behind</th>
                         <th>Days Behind</th>
+                        <th>Median Cadence</th>
+                        <th>Thresholds</th>
                         <th>Compare</th>
                     </tr>
                 </thead>
@@ -139,6 +141,24 @@
                             {% endif %}
                         </td>
                         <td>{{ sub.days_behind if sub.status == "ok" else "—" }}</td>
+                        <td>
+                            {% if sub.median_days is not none %}
+                                ~{{ "%.1f"|format(sub.median_days) }} days
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if sub.thresholds is not none %}
+                                {% if sub.thresholds.is_fallback %}
+                                    fallback
+                                {% else %}
+                                    {{ sub.thresholds.yellow_days | int }}d / {{ sub.thresholds.red_days | int }}d
+                                {% endif %}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
                         <td>
                             {% if sub.compare_url %}
                                 <a href="{{ sub.compare_url }}">View</a>
