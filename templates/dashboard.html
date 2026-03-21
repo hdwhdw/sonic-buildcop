@@ -214,7 +214,7 @@
                         <td>
                             {% if sub.thresholds is not none %}
                                 {% if sub.thresholds.is_fallback %}
-                                    fallback
+                                    30d / 60d <small>(default)</small>
                                 {% else %}
                                     {{ sub.thresholds.yellow_days | int }}d / {{ sub.thresholds.red_days | int }}d
                                 {% endif %}
