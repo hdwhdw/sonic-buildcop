@@ -14,6 +14,27 @@ REPO_OWNER = "sonic-net"
 PARENT_REPO = "sonic-buildimage"
 API_BASE = "https://api.github.com"
 
+# Submodules actively maintained by the mssonicbld bot.
+# Only these are tracked on the dashboard — unmaintained repos are noise.
+BOT_MAINTAINED = {
+    "sonic-swss",
+    "sonic-sairedis",
+    "sonic-platform-daemons",
+    "sonic-utilities",
+    "sonic-swss-common",
+    "sonic-linux-kernel",
+    "sonic-platform-common",
+    "sonic-dash-ha",
+    "dhcprelay",
+    "sonic-gnmi",
+    "sonic-ztp",
+    "sonic-host-services",
+    "sonic-dash-api",
+    "sonic-mgmt-common",
+    "sonic-bmp",
+    "sonic-wpa-supplicant",
+}
+
 
 def parse_gitmodules(content: str) -> list[dict]:
     """Parse .gitmodules content and return target submodule info.
@@ -21,7 +42,7 @@ def parse_gitmodules(content: str) -> list[dict]:
     Uses configparser to parse the INI-like format.  Normalises URLs by
     stripping trailing ``.git`` suffixes (via ``str.removesuffix`` — NOT
     ``rstrip`` which would mangle names like ``sonic-gnmi``).  Filters to
-    only those repos owned by REPO_OWNER (sonic-net).
+    only those repos owned by REPO_OWNER (sonic-net) and present in BOT_MAINTAINED.
     """
     parser = configparser.ConfigParser()
     parser.read_string(content)
@@ -46,8 +67,8 @@ def parse_gitmodules(content: str) -> list[dict]:
         else:
             continue
 
-        # Filter to sonic-net owned submodules
-        if owner == REPO_OWNER:
+        # Filter to bot-maintained sonic-net submodules
+        if owner == REPO_OWNER and repo_slug in BOT_MAINTAINED:
             submodules.append({
                 "name": repo_slug,
                 "path": path,

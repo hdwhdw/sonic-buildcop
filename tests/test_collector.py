@@ -17,10 +17,10 @@ from collector import (
 # ---------------------------------------------------------------------------
 
 
-def test_parse_gitmodules_returns_sonic_net_only(sample_gitmodules):
-    """parse_gitmodules should return all 12 sonic-net submodules from the fixture."""
+def test_parse_gitmodules_returns_bot_maintained_only(sample_gitmodules):
+    """parse_gitmodules should return only bot-maintained sonic-net submodules."""
     result = parse_gitmodules(sample_gitmodules)
-    assert len(result) == 12
+    assert len(result) == 10
 
 
 def test_parse_gitmodules_extracts_path(sample_gitmodules):
@@ -46,36 +46,44 @@ def test_parse_gitmodules_extracts_repo_slug(sample_gitmodules):
         "sonic-sairedis", "sonic-gnmi", "sonic-swss-common",
         "sonic-platform-common", "sonic-host-services",
         "sonic-linux-kernel", "sonic-dash-ha",
-        "sonic-frr", "sonic-dbsyncd",
     }
     actual_repos = {e["repo"] for e in result}
     assert actual_repos == expected_repos
 
 
-def test_parse_gitmodules_extracts_branch_when_present(sample_gitmodules):
+def test_parse_gitmodules_extracts_branch_when_present():
     """Parser should extract an explicit branch field when present."""
-    result = parse_gitmodules(sample_gitmodules)
-    frr = [e for e in result if e["name"] == "sonic-frr"]
-    assert len(frr) == 1
-    assert frr[0]["branch"] == "frr-10.4.1"
+    # sonic-frr isn't bot-maintained, so test with a synthetic entry
+    # that IS in BOT_MAINTAINED and has a branch field
+    import collector
+    content = """\
+[submodule "sonic-swss"]
+\tpath = src/sonic-swss
+\turl = https://github.com/sonic-net/sonic-swss
+\tbranch = custom-branch
+"""
+    result = parse_gitmodules(content)
+    assert len(result) == 1
+    assert result[0]["branch"] == "custom-branch"
 
 
 def test_parse_gitmodules_branch_none_when_absent(sample_gitmodules):
     """Submodules without explicit branch should have branch=None."""
     result = parse_gitmodules(sample_gitmodules)
-    non_frr = [e for e in result if e["name"] != "sonic-frr"]
-    for entry in non_frr:
+    for entry in result:
         assert entry["branch"] is None, f"{entry['name']} has branch={entry['branch']}"
 
 
 def test_parse_gitmodules_excludes_non_sonic_net(sample_gitmodules):
-    """parse_gitmodules should exclude submodules not owned by sonic-net."""
+    """parse_gitmodules should exclude non-sonic-net and non-bot-maintained submodules."""
     result = parse_gitmodules(sample_gitmodules)
     owners = {e["owner"] for e in result}
     assert owners == {"sonic-net"}, f"Non-sonic-net owners found: {owners}"
     names = {e["name"] for e in result}
     assert "p4rt-app" not in names
     assert "sonic-build-tools" not in names
+    assert "sonic-frr" not in names
+    assert "sonic-dbsyncd" not in names
 # ---------------------------------------------------------------------------
 
 
