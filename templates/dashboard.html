@@ -92,20 +92,35 @@
         .badge-yellow { background-color: #ffc107; color: #333; }
         .badge-red { background-color: #dc3545; color: #fff; }
         .badge-unknown { background-color: #6c757d; color: #fff; }
+
+        .description {
+            color: #586069;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+        footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e1e4e8;
+            font-size: 0.85em;
+            color: #586069;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>SONiC Submodule Status</h1>
-        <p class="timestamp">Last updated: <time datetime="{{ generated_at }}">{{ generated_at_relative }}</time></p>
-        <p class="summary">{{ summary_text }}</p>
+        <header>
+            <h1>SONiC Submodule Status</h1>
+            <p class="description">Staleness tracker for <a href="https://github.com/sonic-net/sonic-buildimage">sonic-net/sonic-buildimage</a></p>
+            <p class="timestamp">Last updated: <time datetime="{{ generated_at }}">{{ generated_at_relative }}</time></p>
+            <p class="summary">{{ summary_text }}</p>
+        </header>
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
                         <th>Submodule</th>
                         <th>Status</th>
-                        <th>Path</th>
                         <th>Pinned SHA</th>
                         <th>Commits Behind</th>
                         <th>Days Behind</th>
@@ -117,7 +132,7 @@
                 <tbody>
                     {% for sub in submodules %}
                     <tr>
-                        <td>{{ sub.name }}</td>
+                        <td><a href="{{ sub.url }}">{{ sub.name }}</a></td>
                         <td>
                             {% if sub.staleness_status %}
                                 <span class="badge badge-{{ sub.staleness_status }}">{{ sub.staleness_status }}</span>
@@ -125,10 +140,9 @@
                                 <span class="badge badge-unknown">—</span>
                             {% endif %}
                         </td>
-                        <td>{{ sub.path }}</td>
                         <td>
                             {% if sub.status == "ok" %}
-                                <code>{{ sub.pinned_sha[:7] }}</code>
+                                <a href="https://github.com/{{ sub.owner }}/{{ sub.repo }}/commit/{{ sub.pinned_sha }}"><code>{{ sub.pinned_sha[:7] }}</code></a>
                             {% else %}
                                 <em>unavailable</em>
                             {% endif %}
@@ -171,6 +185,9 @@
                 </tbody>
             </table>
         </div>
+        <footer>
+            <p>Powered by <a href="https://github.com/hdwhdw/sonic-buildcop">sonic-buildcop</a></p>
+        </footer>
     </div>
 </body>
 </html>

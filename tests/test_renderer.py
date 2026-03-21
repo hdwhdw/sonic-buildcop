@@ -20,6 +20,8 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "name": "sonic-swss",
                 "path": "src/sonic-swss",
                 "url": "https://github.com/sonic-net/sonic-swss",
+                "owner": "sonic-net",
+                "repo": "sonic-swss",
                 "pinned_sha": "c20ded7bcef07eb68995aa2347f39c4bc22c9191",
                 "branch": "master",
                 "commits_behind": 5,
@@ -36,6 +38,8 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "name": "sonic-dash-ha",
                 "path": "src/sonic-dash-ha",
                 "url": "https://github.com/sonic-net/sonic-dash-ha",
+                "owner": "sonic-net",
+                "repo": "sonic-dash-ha",
                 "pinned_sha": None,
                 "branch": None,
                 "commits_behind": None,
@@ -86,11 +90,10 @@ def test_render_creates_nojekyll(tmp_path):
 
 
 def test_html_contains_table_headers(tmp_path):
-    """HTML output contains all 9 table column headers."""
+    """HTML output contains all 8 table column headers."""
     html = _render(tmp_path)
     assert "<th>Submodule</th>" in html
     assert "<th>Status</th>" in html
-    assert "<th>Path</th>" in html
     assert "<th>Pinned SHA</th>" in html
     assert "<th>Commits Behind</th>" in html
     assert "<th>Days Behind</th>" in html
@@ -112,6 +115,8 @@ def test_html_contains_pinned_sha_short(tmp_path):
             "name": "test-sub",
             "path": "src/test-sub",
             "url": "https://github.com/test/test-sub",
+            "owner": "test",
+            "repo": "test-sub",
             "pinned_sha": "abc123def4567890",
             "branch": "master",
             "commits_behind": 0,
@@ -166,6 +171,8 @@ def _make_sub(name, staleness_status, days_behind, status="ok", median_days=None
         "name": name,
         "path": f"src/{name}",
         "url": f"https://github.com/sonic-net/{name}",
+        "owner": "sonic-net",
+        "repo": name,
         "pinned_sha": "abc123def4567890" if status == "ok" else None,
         "branch": "master" if status == "ok" else None,
         "commits_behind": 5 if status == "ok" else None,
@@ -302,9 +309,9 @@ def test_render_html_has_timestamp_class(tmp_path):
 
 
 def test_render_html_preserves_all_columns(tmp_path):
-    """All 9 table columns are present."""
+    """All 8 table columns are present."""
     html = _render(tmp_path)
-    for col in ["Submodule", "Status", "Path", "Pinned SHA", "Commits Behind", "Days Behind", "Median Cadence", "Thresholds", "Compare"]:
+    for col in ["Submodule", "Status", "Pinned SHA", "Commits Behind", "Days Behind", "Median Cadence", "Thresholds", "Compare"]:
         assert f"<th>{col}</th>" in html
 
 
@@ -318,6 +325,8 @@ def test_render_html_sorted_worst_first(tmp_path):
             "name": "sub-unavail",
             "path": "src/sub-unavail",
             "url": "https://github.com/sonic-net/sub-unavail",
+            "owner": "sonic-net",
+            "repo": "sub-unavail",
             "pinned_sha": None,
             "branch": None,
             "commits_behind": None,
@@ -429,3 +438,49 @@ def test_render_html_unavailable_shows_dashes_in_cadence_columns(tmp_path):
     # The HTML should contain dash characters for both new columns
     # Count occurrences of "—" — should have at least 3 (days_behind + median_cadence + thresholds)
     assert html.count("—") >= 3
+
+
+# --- Linkification and structural tests ---
+
+
+def test_html_name_links_to_repo(tmp_path):
+    """Submodule name is a link to its GitHub repo (LINK-01)."""
+    html = _render(tmp_path)
+    assert 'href="https://github.com/sonic-net/sonic-swss"' in html
+    assert ">sonic-swss</a>" in html
+
+
+def test_html_sha_links_to_commit(tmp_path):
+    """Pinned SHA links to the exact commit on GitHub (LINK-02)."""
+    html = _render(tmp_path)
+    # sonic-swss has pinned_sha starting with c20ded7
+    assert 'href="https://github.com/sonic-net/sonic-swss/commit/c20ded7bcef07eb68995aa2347f39c4bc22c9191"' in html
+    assert "<code>c20ded7</code>" in html
+
+
+def test_html_has_header_with_description(tmp_path):
+    """Page has header with project description (VIS-04)."""
+    html = _render(tmp_path)
+    assert "<header>" in html
+    assert "sonic-net/sonic-buildimage" in html
+    assert 'class="description"' in html
+
+
+def test_html_has_footer_source_link(tmp_path):
+    """Page has footer linking to sonic-buildcop source repo (LINK-04)."""
+    html = _render(tmp_path)
+    assert "<footer>" in html
+    assert 'href="https://github.com/hdwhdw/sonic-buildcop"' in html
+
+
+def test_html_path_column_removed(tmp_path):
+    """Path column is removed from the table (LINK-03)."""
+    html = _render(tmp_path)
+    assert "<th>Path</th>" not in html
+
+
+def test_html_unavailable_sha_not_linked(tmp_path):
+    """Unavailable submodules show 'unavailable' without a commit link."""
+    html = _render(tmp_path)
+    # sonic-dash-ha is unavailable — should show "unavailable" text, not a link
+    assert "<em>unavailable</em>" in html
