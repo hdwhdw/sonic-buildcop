@@ -1,88 +1,42 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: unknown
-stopped_at: Completed 03-02-PLAN.md
-last_updated: "2026-03-20T20:49:01.683Z"
+milestone: v1.1
+milestone_name: dashboard-polish
+status: defining-requirements
+stopped_at: Milestone v1.1 started
+last_updated: "2026-03-21T04:58:00.000Z"
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-20)
+See: .planning/PROJECT.md (updated 2026-03-21)
 
 **Core value:** Make submodule staleness visible and actionable — so maintainers catch drift early instead of discovering months-old pointers during crunch time.
-**Current focus:** Phase 03 — ui-polish
+**Current focus:** Milestone v1.1 — Dashboard Polish
 
 ## Current Position
 
-Phase: 03 (dashboard-ui) — IN PROGRESS
-Plan: 1 of 2
-
-## Performance Metrics
-
-**Velocity:**
-
-- Total plans completed: 4
-- Average duration: ~3min
-- Total execution time: ~0.2 hours
-
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01 | 3 | ~8min | ~3min |
-| 02 | 1 | 3min | 3min |
-
-**Recent Trend:**
-
-- Last 5 plans: ~3min each
-- Trend: Stable
-
-*Updated after each plan completion*
-| Phase 02-01 P01 | 3min | 2 tasks | 3 files |
-| Phase 01-02 P02 | 2min | 2 tasks | 5 files |
-| Phase 01 P01 | 3min | 2 tasks | 3 files |
-| Phase 02 P02 | 1min | 2 tasks | 2 files |
-| Phase 03 P01 | 2min | 2 tasks | 2 files |
-| Phase 03 P02 | 2min | 2 tasks | 2 files |
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-21 — Milestone v1.1 started
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- [Roadmap]: 3-phase coarse structure — data pipeline first, staleness model second, UI polish third
-- [Roadmap]: Top 10 submodules only for v1 (scoped in DATA-01)
-- [Phase 01-02]: Jinja2 with autoescape=True for safe HTML rendering
-- [Phase 01-02]: Template dir resolved relative to scripts/ for portability
-- [Phase 01-02]: ENV vars DATA_PATH/SITE_DIR for renderer entry point config
-- [Phase 01]: Used configparser for .gitmodules parsing — verified on actual 49-entry file
-- [Phase 01]: removesuffix('.git') for URL normalization — avoids rstrip mangling repo names
-- [Phase 01]: days_behind = HEAD date - pinned date (not now() - pinned date)
-- [Phase 02-01]: Separate staleness.py module — not integrated into collector.py
-- [Phase 02-01]: statistics.median for outlier-resistant cadence computation
-- [Phase 02-01]: 1.0-day minimum floor prevents zero-threshold edge case
-- [Phase 02-01]: Fixed commit thresholds (2/4) complement day-based thresholds
-- [Phase 02]: Status badge as 2nd column with green/yellow/red/unknown CSS badges
-- [Phase 02]: Pipeline enrichment: collect → enrich → write in single command
-- [Phase 03]: _TIER_ORDER dict for sort priority: red=0, yellow=1, green=2, unknown=3
-- [Phase 03]: summary_text passed to template.render before template uses it (Jinja2 ignores extras)
-- [Phase 03]: System font stack and max-width 1200px container for professional dashboard appearance
-- [Phase 03]: overflow-x: auto wrapper for responsive horizontal scroll on narrow screens
-
-### Pending Todos
-
-None yet.
+- [v1.0] Python for all scripts (SONiC ecosystem consistency)
+- [v1.0] Separate modules: collector.py → staleness.py → renderer.py with JSON interchange
+- [v1.0] Cadence from submodule's own commit history (development velocity)
+- [v1.0] Median not mean, 2×/4× multipliers, fallback 30d/10c
+- [v1.0] Pre-sorted in Python, no JavaScript
 
 ### Blockers/Concerns
 
@@ -90,6 +44,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-20T20:49:01.680Z
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-03-21
+Stopped at: Milestone v1.1 started
 Resume file: None

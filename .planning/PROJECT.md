@@ -12,6 +12,19 @@ Dashboard tracks 10 sonic-net submodules with green/yellow/red staleness badges,
 
 See `.planning/milestones/v1.0-ROADMAP.md` for full v1.0 details.
 
+## Current Milestone: v1.1 Dashboard Polish
+
+**Goal:** Upgrade the dashboard from functional to professional — better visuals, richer data, everything linkable.
+
+**Target features:**
+- Visual overhaul: professional CSS, dark mode support, improved table styling
+- Linkify everything: submodule name → repo, path → buildimage directory, SHA → commit
+- More data columns: median cadence, thresholds, last upstream commit date
+- Drop noise: remove Path column (redundant with linked name)
+- Human-friendly timestamps ("3 hours ago" instead of ISO 8601)
+- Expand to all 31 sonic-net submodules
+- Footer with link to source repo
+
 ## Core Value
 
 Make submodule staleness visible and actionable — so maintainers catch drift early instead of discovering months-old pointers during crunch time.
