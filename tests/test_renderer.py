@@ -484,3 +484,50 @@ def test_html_unavailable_sha_not_linked(tmp_path):
     html = _render(tmp_path)
     # sonic-dash-ha is unavailable — should show "unavailable" text, not a link
     assert "<em>unavailable</em>" in html
+
+
+# --- Dark mode and badge refinement tests ---
+
+
+def test_html_has_dark_mode_media_query(tmp_path):
+    """Dashboard CSS includes dark mode support via prefers-color-scheme (VIS-02)."""
+    html = _render(tmp_path)
+    assert "prefers-color-scheme: dark" in html
+
+
+def test_html_dark_mode_defines_body_colors(tmp_path):
+    """Dark mode block defines dark background and light text."""
+    html = _render(tmp_path)
+    # Dark mode section should define body background and text
+    dark_section_start = html.index("prefers-color-scheme: dark")
+    dark_section = html[dark_section_start:]
+    assert "#0d1117" in dark_section  # dark background
+    assert "#c9d1d9" in dark_section  # light text
+
+
+def test_html_badge_has_dot_indicator(tmp_path):
+    """Status badges show dot indicator with status text (VIS-03)."""
+    html = _render(tmp_path)
+    # sonic-swss has staleness_status="green"
+    assert "● Green" in html
+
+
+def test_html_badge_pill_shape(tmp_path):
+    """Badge CSS uses pill shape with rounded corners (VIS-01)."""
+    html = _render(tmp_path)
+    assert "border-radius: 12px" in html
+
+
+def test_html_dark_mode_badge_colors(tmp_path):
+    """Dark mode defines adjusted badge colors for readability."""
+    html = _render(tmp_path)
+    dark_start = html.index("prefers-color-scheme: dark")
+    dark_section = html[dark_start:]
+    assert "#238636" in dark_section  # dark green badge
+    assert "#da3633" in dark_section  # dark red badge
+
+
+def test_html_table_has_border(tmp_path):
+    """Table has a border for a contained professional look (VIS-01)."""
+    html = _render(tmp_path)
+    assert "border-radius: 6px" in html
