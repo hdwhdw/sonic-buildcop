@@ -121,7 +121,7 @@ def test_get_default_branch(mock_repo_response):
 
 
 def test_get_staleness_when_behind(mock_compare_response, mock_head_commit_response):
-    """get_staleness should return commits_behind=5 and days_behind=36."""
+    """get_staleness should return commits_behind=5 and days_behind=36.0."""
     session = MagicMock(spec=requests.Session)
 
     # First call → compare response, second call → HEAD commit response
@@ -135,7 +135,7 @@ def test_get_staleness_when_behind(mock_compare_response, mock_head_commit_respo
 
     result = get_staleness(session, "sonic-net", "sonic-swss", "abc123", "master")
     assert result["commits_behind"] == 5
-    assert result["days_behind"] == 36  # Feb 20 - Jan 15 = 36 days
+    assert result["days_behind"] == 36.0  # Feb 20 - Jan 15 = 36 days
 
 
 def test_get_staleness_when_identical(mock_compare_response_identical):
@@ -215,7 +215,7 @@ def test_collect_submodule_success(mock_sleep):
     assert result["pinned_sha"] == "abc123def4567890abc123def4567890abc123de"
     assert result["branch"] == "master"
     assert result["commits_behind"] == 5
-    assert result["days_behind"] == 36
+    assert result["days_behind"] == 36.0
     assert result["compare_url"] == "https://github.com/sonic-net/sonic-swss/compare/abc123def4567890abc123def4567890abc123de...master"
     assert result["error"] is None
 

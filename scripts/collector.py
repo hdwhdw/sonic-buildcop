@@ -137,7 +137,7 @@ def get_staleness(
     head_date_str = head_resp.json()["commit"]["committer"]["date"]
     head_date = datetime.fromisoformat(head_date_str.replace("Z", "+00:00"))
 
-    days_behind = (head_date - pinned_date).days
+    days_behind = round((head_date - pinned_date).total_seconds() / 86400, 1)
 
     return {"commits_behind": commits_behind, "days_behind": max(0, days_behind)}
 

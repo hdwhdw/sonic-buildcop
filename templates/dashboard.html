@@ -203,7 +203,7 @@
                                 <em>{{ sub.error }}</em>
                             {% endif %}
                         </td>
-                        <td>{{ sub.days_behind if sub.status == "ok" else "—" }}</td>
+                        <td>{{ "%.1f"|format(sub.days_behind) if sub.status == "ok" else "—" }}</td>
                         <td>
                             {% if sub.median_days is not none %}
                                 ~{{ "%.1f"|format(sub.median_days) }} days
