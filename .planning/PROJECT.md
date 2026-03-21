@@ -6,24 +6,11 @@ A build health dashboard for sonic-net/sonic-buildimage that tracks submodule st
 
 ## Current State
 
-**v1.0 shipped** — 2026-03-21
+**v1.1 shipped** — 2026-03-21
 
-Dashboard tracks 10 sonic-net submodules with green/yellow/red staleness badges, sorted worst-first, updated daily via GitHub Actions cron. 57 unit tests, ~1,770 lines of Python/HTML.
+Dashboard tracks all ~31 sonic-net submodules with cadence-aware staleness badges, linked names/SHAs, dark mode support, and professional CSS. 81 unit tests. Updated daily via GitHub Actions cron. Live at https://hdwhdw.github.io/sonic-buildcop/.
 
-See `.planning/milestones/v1.0-ROADMAP.md` for full v1.0 details.
-
-## Current Milestone: v1.1 Dashboard Polish
-
-**Goal:** Upgrade the dashboard from functional to professional — better visuals, richer data, everything linkable.
-
-**Target features:**
-- Visual overhaul: professional CSS, dark mode support, improved table styling
-- Linkify everything: submodule name → repo, path → buildimage directory, SHA → commit
-- More data columns: median cadence, thresholds, last upstream commit date
-- Drop noise: remove Path column (redundant with linked name)
-- Human-friendly timestamps ("3 hours ago" instead of ISO 8601)
-- Expand to all 31 sonic-net submodules
-- Footer with link to source repo
+See `.planning/milestones/v1.1-ROADMAP.md` for full v1.1 details.
 
 ## Core Value
 
@@ -33,8 +20,8 @@ Make submodule staleness visible and actionable — so maintainers catch drift e
 
 - GitHub Issues alerting for submodules that cross red threshold
 - Auto-close issues when pointer is updated
-- Expand to all 31 sonic-net submodules
 - Team ownership mapping from CODEOWNERS
+- Historical trend charts
 
 ## Out of Scope
 
@@ -56,10 +43,12 @@ Make submodule staleness visible and actionable — so maintainers catch drift e
 |----------|-----------|---------|
 | Standalone repo (hdwhdw/sonic-buildcop) | Easier to iterate without sonic-net admin permissions | ✅ Validated |
 | Auto-compute staleness thresholds from cadence | Fixed thresholds don't work — submodules have wildly different update frequencies | ✅ Validated |
-| 10 target submodules for v1 | Focused scope, expand in v2 | ✅ Shipped |
+| 10 target submodules for v1 | Focused scope, expand in v1.1 | ✅ Shipped (expanded to all in v1.1) |
+| CSS-only dark mode | No JS toggle, prefers-color-scheme auto-detection | ✅ Validated |
+| Drop Path column | Redundant with linked name; always `src/<name>` | ✅ Shipped |
 | Dashboard first, alerting second | Need to validate the staleness model before sending notifications | ✅ Validated |
 | Python for all scripts | SONiC ecosystem consistency, pre-installed on runners | ✅ Validated |
 | Median not mean for cadence | Resists holiday gaps and burst outliers | ✅ Validated |
 
 ---
-*Last updated: 2026-03-21 after v1.0 milestone completion*
+*Last updated: 2026-03-21 after v1.1 milestone completion*
