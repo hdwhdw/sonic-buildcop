@@ -34,11 +34,11 @@ See [v1.0 Archive](milestones/v1.0-ROADMAP.md) for full details.
   2. Each submodule row shows its median cadence (e.g., "~1.2 days")
   3. Each submodule row shows its staleness thresholds (e.g., "yellow: 2d / red: 5d")
   4. "Last updated" timestamp displays as relative time (e.g., "3 hours ago") instead of ISO 8601
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md — Expand collector to all sonic-net submodules (DATA-09)
+- [ ] 04-02-PLAN.md — Add cadence columns and human-friendly timestamps (DATA-07, DATA-08, DATA-10)
 
 ### Phase 5: Visual Overhaul & Linkification
 **Goal**: Dashboard looks professional with consistent styling, dark mode support, and every entity linked to its GitHub source
