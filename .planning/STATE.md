@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Dashboard Polish
-status: phase-complete
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-03-21T05:34:30.589Z"
-last_activity: 2026-03-21 — Completed 04-02 cadence columns
+status: completed
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-21T06:26:41.133Z"
+last_activity: 2026-03-21 — Completed 04-02 cadence columns and relative timestamps
 progress:
   total_phases: 2
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 4
+  completed_plans: 3
   percent: 80
 ---
 
@@ -49,6 +49,7 @@ Progress: [████████████████░░░░] 80% (Ph
 | 3. Dashboard UI | 2 | — | — |
 | Phase 04-data-expansion P01 | 3min | 2 tasks | 3 files |
 | Phase 04-data-expansion P02 | 4min | 2 tasks | 3 files |
+| Phase 05-visual-overhaul P01 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,8 @@ Recent decisions affecting current work:
 - [v1.1] DATA-09 (expand to 31 submodules) drives Phase 4 — collector change before template changes
 - [Phase 04-data-expansion]: Filter by owner == REPO_OWNER instead of hardcoded TARGET_SUBMODULES list
 - [Phase 04-data-expansion]: Relative timestamps with integer division buckets; thresholds as 'Xd / Xd' format
+- [Phase 05-visual-overhaul]: Commit URLs built in template via owner/repo/sha fields
+- [Phase 05-visual-overhaul]: Path column removed as redundant with linked names
 
 ### Blockers/Concerns
 
@@ -70,6 +73,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-21
-Stopped at: Completed 04-02-PLAN.md — Phase 4 complete
+Last session: 2026-03-21T06:26:41.130Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None

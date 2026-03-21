@@ -12,14 +12,14 @@ Requirements for Dashboard Polish milestone. Builds on v1.0's functional dashboa
 - [ ] **VIS-01**: Dashboard has professional CSS with system fonts, refined borders, row hover, and consistent spacing
 - [ ] **VIS-02**: Dark mode support (auto-detects OS preference via `prefers-color-scheme`)
 - [ ] **VIS-03**: Status badges render as colored pills (not plain text "green"/"yellow"/"red")
-- [ ] **VIS-04**: Header area with project title and brief description of what the dashboard shows
+- [x] **VIS-04**: Header area with project title and brief description of what the dashboard shows
 
 ### Linkification
 
-- [ ] **LINK-01**: Submodule name links to its GitHub repo (e.g., sonic-net/sonic-gnmi)
-- [ ] **LINK-02**: Pinned SHA links to the exact commit on GitHub
-- [ ] **LINK-03**: Path column replaced by link to submodule directory in sonic-buildimage (or dropped if name link is sufficient)
-- [ ] **LINK-04**: Footer with link to hdwhdw/sonic-buildcop source repo
+- [x] **LINK-01**: Submodule name links to its GitHub repo (e.g., sonic-net/sonic-gnmi)
+- [x] **LINK-02**: Pinned SHA links to the exact commit on GitHub
+- [x] **LINK-03**: Path column replaced by link to submodule directory in sonic-buildimage (or dropped if name link is sufficient)
+- [x] **LINK-04**: Footer with link to hdwhdw/sonic-buildcop source repo
 
 ### Data Enrichment
 
@@ -51,11 +51,11 @@ Deferred to next milestone:
 | VIS-01 | Phase 5 | Pending |
 | VIS-02 | Phase 5 | Pending |
 | VIS-03 | Phase 5 | Pending |
-| VIS-04 | Phase 5 | Pending |
-| LINK-01 | Phase 5 | Pending |
-| LINK-02 | Phase 5 | Pending |
-| LINK-03 | Phase 5 | Pending |
-| LINK-04 | Phase 5 | Pending |
+| VIS-04 | Phase 5 | Complete |
+| LINK-01 | Phase 5 | Complete |
+| LINK-02 | Phase 5 | Complete |
+| LINK-03 | Phase 5 | Complete |
+| LINK-04 | Phase 5 | Complete |
 | DATA-07 | Phase 4 | Complete |
 | DATA-08 | Phase 4 | Complete |
 | DATA-09 | Phase 4 | Complete |
