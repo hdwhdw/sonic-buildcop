@@ -9,9 +9,9 @@ Requirements for Dashboard Polish milestone. Builds on v1.0's functional dashboa
 
 ### Visual Polish
 
-- [ ] **VIS-01**: Dashboard has professional CSS with system fonts, refined borders, row hover, and consistent spacing
-- [ ] **VIS-02**: Dark mode support (auto-detects OS preference via `prefers-color-scheme`)
-- [ ] **VIS-03**: Status badges render as colored pills (not plain text "green"/"yellow"/"red")
+- [x] **VIS-01**: Dashboard has professional CSS with system fonts, refined borders, row hover, and consistent spacing
+- [x] **VIS-02**: Dark mode support (auto-detects OS preference via `prefers-color-scheme`)
+- [x] **VIS-03**: Status badges render as colored pills (not plain text "green"/"yellow"/"red")
 - [x] **VIS-04**: Header area with project title and brief description of what the dashboard shows
 
 ### Linkification
@@ -48,9 +48,9 @@ Deferred to next milestone:
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| VIS-01 | Phase 5 | Pending |
-| VIS-02 | Phase 5 | Pending |
-| VIS-03 | Phase 5 | Pending |
+| VIS-01 | Phase 5 | Complete |
+| VIS-02 | Phase 5 | Complete |
+| VIS-03 | Phase 5 | Complete |
 | VIS-04 | Phase 5 | Complete |
 | LINK-01 | Phase 5 | Complete |
 | LINK-02 | Phase 5 | Complete |
