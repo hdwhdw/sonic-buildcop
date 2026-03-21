@@ -9,7 +9,7 @@ import pytest
 
 @pytest.fixture
 def sample_gitmodules():
-    """Multi-line .gitmodules INI string with 12 entries (10 targets + 2 non-targets)."""
+    """Multi-line .gitmodules INI string with 14 entries (12 sonic-net + 2 non-sonic-net)."""
     return """\
 [submodule "sonic-swss"]
 \tpath = src/sonic-swss
@@ -59,6 +59,14 @@ def sample_gitmodules():
 [submodule "sonic-dbsyncd"]
 \tpath = src/sonic-dbsyncd
 \turl = https://github.com/sonic-net/sonic-dbsyncd
+
+[submodule "p4rt-app"]
+\tpath = src/p4rt-app
+\turl = https://github.com/p4lang/p4rt-app
+
+[submodule "sonic-build-tools"]
+\tpath = src/sonic-build-tools
+\turl = https://github.com/Azure/sonic-build-tools
 """
 
 

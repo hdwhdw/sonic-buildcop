@@ -17,10 +17,10 @@ from collector import (
 # ---------------------------------------------------------------------------
 
 
-def test_parse_gitmodules_returns_10_targets(sample_gitmodules):
-    """parse_gitmodules should return exactly 10 target submodules."""
+def test_parse_gitmodules_returns_sonic_net_only(sample_gitmodules):
+    """parse_gitmodules should return all 12 sonic-net submodules from the fixture."""
     result = parse_gitmodules(sample_gitmodules)
-    assert len(result) == 10
+    assert len(result) == 12
 
 
 def test_parse_gitmodules_extracts_path(sample_gitmodules):
