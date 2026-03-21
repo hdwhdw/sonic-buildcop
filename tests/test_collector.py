@@ -46,42 +46,36 @@ def test_parse_gitmodules_extracts_repo_slug(sample_gitmodules):
         "sonic-sairedis", "sonic-gnmi", "sonic-swss-common",
         "sonic-platform-common", "sonic-host-services",
         "sonic-linux-kernel", "sonic-dash-ha",
+        "sonic-frr", "sonic-dbsyncd",
     }
     actual_repos = {e["repo"] for e in result}
     assert actual_repos == expected_repos
 
 
-def test_parse_gitmodules_extracts_branch_when_present():
+def test_parse_gitmodules_extracts_branch_when_present(sample_gitmodules):
     """Parser should extract an explicit branch field when present."""
-    content = """\
-[submodule "sonic-frr"]
-\tpath = src/sonic-frr
-\turl = https://github.com/sonic-net/sonic-frr
-\tbranch = frr-10.4.1
-"""
-    # Call parse directly on a single-entry fixture.  sonic-frr is not in
-    # TARGET_SUBMODULES, so we monkeypatch to include it temporarily.
-    import collector
-    original = collector.TARGET_SUBMODULES[:]
-    try:
-        collector.TARGET_SUBMODULES.append("sonic-frr")
-        result = parse_gitmodules(content)
-        frr = [e for e in result if e["name"] == "sonic-frr"]
-        assert len(frr) == 1
-        assert frr[0]["branch"] == "frr-10.4.1"
-    finally:
-        collector.TARGET_SUBMODULES[:] = original
+    result = parse_gitmodules(sample_gitmodules)
+    frr = [e for e in result if e["name"] == "sonic-frr"]
+    assert len(frr) == 1
+    assert frr[0]["branch"] == "frr-10.4.1"
 
 
 def test_parse_gitmodules_branch_none_when_absent(sample_gitmodules):
-    """All 10 targets should have branch=None (none specify explicit branch)."""
+    """Submodules without explicit branch should have branch=None."""
     result = parse_gitmodules(sample_gitmodules)
-    for entry in result:
+    non_frr = [e for e in result if e["name"] != "sonic-frr"]
+    for entry in non_frr:
         assert entry["branch"] is None, f"{entry['name']} has branch={entry['branch']}"
 
 
-# ---------------------------------------------------------------------------
-# get_pinned_sha tests
+def test_parse_gitmodules_excludes_non_sonic_net(sample_gitmodules):
+    """parse_gitmodules should exclude submodules not owned by sonic-net."""
+    result = parse_gitmodules(sample_gitmodules)
+    owners = {e["owner"] for e in result}
+    assert owners == {"sonic-net"}, f"Non-sonic-net owners found: {owners}"
+    names = {e["name"] for e in result}
+    assert "p4rt-app" not in names
+    assert "sonic-build-tools" not in names
 # ---------------------------------------------------------------------------
 
 
