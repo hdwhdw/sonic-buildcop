@@ -50,11 +50,11 @@ Plans:
   3. Path column is removed or replaced with a direct link to the submodule directory in sonic-buildimage
   4. Page has a header with project title/description and a footer linking to the source repo
   5. Dashboard renders with professional CSS (system fonts, refined borders, row hover), colored status pills (not plain text), and correct colors in both light and dark mode
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md — Linkification + structural changes (LINK-01, LINK-02, LINK-03, LINK-04, VIS-04)
+- [ ] 05-02-PLAN.md — CSS overhaul + dark mode (VIS-01, VIS-02, VIS-03)
 
 ## Progress
 
