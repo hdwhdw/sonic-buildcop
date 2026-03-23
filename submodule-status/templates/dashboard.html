@@ -114,6 +114,47 @@
             padding-bottom: 16px;
             border-bottom: 1px solid #e1e4e8;
         }
+        .toggle-header { width: 32px; }
+        .toggle-cell { text-align: center; width: 32px; }
+        .toggle-icon {
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.85em;
+            color: #586069;
+        }
+        .toggle-icon:hover { color: #24292e; }
+        .detail-row td {
+            padding: 0 !important;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        .detail-panel {
+            padding: 12px 16px 12px 44px;
+            background: #f6f8fa;
+        }
+        .detail-item { margin-bottom: 6px; }
+        .detail-item:last-child { margin-bottom: 0; }
+        .detail-label {
+            font-weight: 600;
+            display: inline-block;
+            min-width: 150px;
+            color: #24292e;
+        }
+        .detail-null { color: #586069; font-style: italic; }
+        .detail-sep { margin: 0 4px; color: #586069; }
+        .ci-pass { color: #28a745; font-weight: 600; }
+        .ci-fail { color: #dc3545; font-weight: 600; }
+        .ci-pending { color: #d29922; font-weight: 600; }
+        .expand-all-btn {
+            background: none;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.85em;
+            cursor: pointer;
+            color: #24292e;
+            margin-top: 8px;
+        }
+        .expand-all-btn:hover { background: #f6f8fa; }
         @media (prefers-color-scheme: dark) {
             body {
                 background: #0d1117;
@@ -148,6 +189,18 @@
             .timestamp, .description {
                 color: #8b949e;
             }
+            .toggle-icon { color: #8b949e; }
+            .toggle-icon:hover { color: #c9d1d9; }
+            .detail-panel { background: #161b22; }
+            .detail-row td { border-bottom-color: #30363d; }
+            .detail-label { color: #c9d1d9; }
+            .detail-null { color: #8b949e; }
+            .detail-sep { color: #8b949e; }
+            .ci-pass { color: #3fb950; }
+            .ci-fail { color: #f85149; }
+            .ci-pending { color: #d29922; }
+            .expand-all-btn { border-color: #30363d; color: #c9d1d9; }
+            .expand-all-btn:hover { background: #161b22; }
             /* Badge dark mode — slightly muted backgrounds for less eye strain */
             .badge-green { background-color: #238636; color: #fff; }
             .badge-yellow { background-color: #d29922; color: #fff; }
@@ -163,11 +216,13 @@
             <p class="description">Staleness tracker for <a href="https://github.com/sonic-net/sonic-buildimage">sonic-net/sonic-buildimage</a></p>
             <p class="timestamp">Last updated: <time datetime="{{ generated_at }}">{{ generated_at_relative }}</time></p>
             <p class="summary">{{ summary_text }}</p>
+            <button class="expand-all-btn" onclick="toggleAll()">Expand All</button>
         </header>
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
+                        <th class="toggle-header"></th>
                         <th>Submodule</th>
                         <th>Status</th>
                         <th>Pinned SHA</th>
@@ -181,6 +236,7 @@
                 <tbody>
                     {% for sub in submodules %}
                     <tr>
+                        <td class="toggle-cell"><span class="toggle-icon" onclick="toggleDetail(this)">&#9654;</span></td>
                         <td><a href="{{ sub.url }}">{{ sub.name }}</a></td>
                         <td>
                             {% if sub.staleness_status %}
@@ -230,6 +286,64 @@
                             {% endif %}
                         </td>
                     </tr>
+                    <tr class="detail-row" style="display:none">
+                        <td colspan="9">
+                            <div class="detail-panel">
+                                <div class="detail-item">
+                                    <span class="detail-label">Open Bot PR</span>
+                                    <span class="detail-value">
+                                        {% if sub.open_bot_pr %}
+                                            <a href="{{ sub.open_bot_pr.url }}">View PR</a>
+                                            <span class="detail-sep">&middot;</span>
+                                            {{ sub.open_bot_pr.age_days }} days old
+                                            <span class="detail-sep">&middot;</span>
+                                            {% if sub.open_bot_pr.ci_status == "pass" %}
+                                                <span class="ci-pass">&#10003; Pass</span>
+                                            {% elif sub.open_bot_pr.ci_status == "fail" %}
+                                                <span class="ci-fail">&#10007; Fail</span>
+                                            {% elif sub.open_bot_pr.ci_status == "pending" %}
+                                                <span class="ci-pending">&#9203; Pending</span>
+                                            {% else %}
+                                                <span class="detail-null">CI unknown</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="detail-null">No open PR</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Last Pointer Update</span>
+                                    <span class="detail-value">
+                                        {% if sub.last_merged_bot_pr %}
+                                            <a href="{{ sub.last_merged_bot_pr.url }}">{{ sub.last_merged_bot_pr.merged_at[:10] }}</a>
+                                        {% else %}
+                                            <span class="detail-null">No merged PR found</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Latest Repo Commit</span>
+                                    <span class="detail-value">
+                                        {% if sub.latest_repo_commit %}
+                                            <a href="{{ sub.latest_repo_commit.url }}">{{ sub.latest_repo_commit.date[:10] }}</a>
+                                        {% else %}
+                                            <span class="detail-null">No commit data</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Avg Update Delay</span>
+                                    <span class="detail-value">
+                                        {% if sub.avg_delay_days is defined and sub.avg_delay_days is not none %}
+                                            {{ "%.1f"|format(sub.avg_delay_days) }} days
+                                        {% else %}
+                                            <span class="detail-null">Not enough data</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -238,5 +352,24 @@
             <p>Powered by <a href="https://github.com/hdwhdw/sonic-buildcop">sonic-buildcop</a></p>
         </footer>
     </div>
+    <script>
+    function toggleDetail(icon) {
+        var row = icon.closest('tr').nextElementSibling;
+        var isHidden = row.style.display === 'none';
+        row.style.display = isHidden ? 'table-row' : 'none';
+        icon.textContent = isHidden ? '\u25BC' : '\u25B6';
+    }
+    function toggleAll() {
+        var icons = document.querySelectorAll('.toggle-icon');
+        var btn = document.querySelector('.expand-all-btn');
+        var allOpen = Array.from(icons).every(function(i) { return i.textContent === '\u25BC'; });
+        icons.forEach(function(icon) {
+            var row = icon.closest('tr').nextElementSibling;
+            row.style.display = allOpen ? 'none' : 'table-row';
+            icon.textContent = allOpen ? '\u25B6' : '\u25BC';
+        });
+        btn.textContent = allOpen ? 'Expand All' : 'Collapse All';
+    }
+    </script>
 </body>
 </html>
