@@ -9,6 +9,9 @@ from enrichment import (
     fetch_open_bot_prs,
     fetch_merged_bot_prs,
     fetch_latest_repo_commits,
+    compute_avg_delay_for_submodule,
+    compute_avg_delay,
+    enrich_with_details,
 )
 
 
