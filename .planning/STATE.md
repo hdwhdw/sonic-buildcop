@@ -4,7 +4,7 @@ milestone: v1.2
 milestone_name: Detail Enrichment
 status: unknown
 stopped_at: Completed 06-02-PLAN.md — all ENRICH requirements done, enrichment wired into collector.py
-last_updated: "2026-03-23T16:37:32.313Z"
+last_updated: "2026-03-23T16:40:58.150Z"
 progress:
   total_phases: 2
   completed_phases: 1
