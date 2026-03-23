@@ -4,7 +4,7 @@ milestone: v1.2
 milestone_name: Detail Enrichment
 status: unknown
 stopped_at: Completed 07-01-PLAN.md — all EXPAND requirements done, expandable detail rows live
-last_updated: "2026-03-23T18:52:43.061Z"
+last_updated: "2026-03-23T18:56:30.924Z"
 progress:
   total_phases: 2
   completed_phases: 2
