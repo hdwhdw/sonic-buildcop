@@ -33,6 +33,10 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "median_days": 1.5,
                 "commit_count_6m": 20,
                 "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "is_fallback": False},
+                "open_bot_pr": None,
+                "last_merged_bot_pr": None,
+                "latest_repo_commit": None,
+                "avg_delay_days": None,
             },
             {
                 "name": "sonic-dash-ha",
@@ -51,6 +55,10 @@ def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
                 "median_days": None,
                 "commit_count_6m": None,
                 "thresholds": None,
+                "open_bot_pr": None,
+                "last_merged_bot_pr": None,
+                "latest_repo_commit": None,
+                "avg_delay_days": None,
             },
         ]
     return {"generated_at": generated_at, "submodules": submodules}
@@ -128,6 +136,10 @@ def test_html_contains_pinned_sha_short(tmp_path):
             "median_days": 1.5,
             "commit_count_6m": 20,
             "thresholds": {"yellow_days": 3.0, "red_days": 6.0, "is_fallback": False},
+            "open_bot_pr": None,
+            "last_merged_bot_pr": None,
+            "latest_repo_commit": None,
+            "avg_delay_days": None,
         }
     ])
     html = _render(tmp_path, data)
@@ -165,7 +177,8 @@ def test_render_creates_site_directory(tmp_path):
 # --- Helpers for sort/summary tests ---
 
 
-def _make_sub(name, staleness_status, days_behind, status="ok", median_days=None, thresholds=None):
+def _make_sub(name, staleness_status, days_behind, status="ok", median_days=None, thresholds=None,
+              open_bot_pr=None, last_merged_bot_pr=None, latest_repo_commit=None, avg_delay_days=None):
     """Minimal submodule dict for sort/summary testing."""
     return {
         "name": name,
@@ -184,6 +197,10 @@ def _make_sub(name, staleness_status, days_behind, status="ok", median_days=None
         "median_days": median_days,
         "commit_count_6m": None,
         "thresholds": thresholds,
+        "open_bot_pr": open_bot_pr,
+        "last_merged_bot_pr": last_merged_bot_pr,
+        "latest_repo_commit": latest_repo_commit,
+        "avg_delay_days": avg_delay_days,
     }
 
 
@@ -338,6 +355,10 @@ def test_render_html_sorted_worst_first(tmp_path):
             "median_days": None,
             "commit_count_6m": None,
             "thresholds": None,
+            "open_bot_pr": None,
+            "last_merged_bot_pr": None,
+            "latest_repo_commit": None,
+            "avg_delay_days": None,
         },
     ]
     data = _make_data(submodules=subs)
@@ -531,3 +552,127 @@ def test_html_table_has_border(tmp_path):
     """Table has a border for a contained professional look (VIS-01)."""
     html = _render(tmp_path)
     assert "border-radius: 6px" in html
+
+
+# --- Expandable detail row tests ---
+
+
+def test_html_has_toggle_icon(tmp_path):
+    """Each row has a toggle icon for expanding details (EXPAND-01)."""
+    html = _render(tmp_path)
+    assert 'class="toggle-icon"' in html
+    assert 'toggleDetail' in html
+
+
+def test_html_has_detail_rows(tmp_path):
+    """Hidden detail rows exist for each submodule (EXPAND-01)."""
+    html = _render(tmp_path)
+    assert 'class="detail-row"' in html
+    assert 'display:none' in html
+
+
+def test_html_has_expand_all_button(tmp_path):
+    """Expand All button exists in header area (EXPAND-01)."""
+    html = _render(tmp_path)
+    assert 'class="expand-all-btn"' in html
+    assert 'toggleAll()' in html
+    assert 'Expand All' in html
+
+
+def test_html_has_toggle_js_functions(tmp_path):
+    """Toggle JavaScript functions exist in the page."""
+    html = _render(tmp_path)
+    assert 'function toggleDetail' in html
+    assert 'function toggleAll' in html
+
+
+def test_html_detail_shows_open_bot_pr(tmp_path):
+    """Detail panel shows open bot PR link and age when data exists (EXPAND-02)."""
+    subs = [_make_sub("test-sub", "green", 3, open_bot_pr={
+        "url": "https://github.com/sonic-net/sonic-buildimage/pull/101",
+        "age_days": 5.2,
+        "ci_status": "pass",
+    })]
+    html = _render(tmp_path, _make_data(submodules=subs))
+    assert 'href="https://github.com/sonic-net/sonic-buildimage/pull/101"' in html
+    assert '5.2' in html
+    assert 'ci-pass' in html
+
+
+def test_html_detail_null_open_pr(tmp_path):
+    """Detail panel shows placeholder when no open PR (EXPAND-02)."""
+    html = _render(tmp_path)
+    assert 'No open PR' in html
+
+
+def test_html_detail_ci_status_fail(tmp_path):
+    """CI status fail is rendered with fail indicator (EXPAND-02)."""
+    subs = [_make_sub("test-sub", "green", 3, open_bot_pr={
+        "url": "https://example.com/pr/1",
+        "age_days": 2.0,
+        "ci_status": "fail",
+    })]
+    html = _render(tmp_path, _make_data(submodules=subs))
+    assert 'ci-fail' in html
+
+
+def test_html_detail_ci_status_pending(tmp_path):
+    """CI status pending is rendered with pending indicator (EXPAND-02)."""
+    subs = [_make_sub("test-sub", "green", 3, open_bot_pr={
+        "url": "https://example.com/pr/1",
+        "age_days": 1.0,
+        "ci_status": "pending",
+    })]
+    html = _render(tmp_path, _make_data(submodules=subs))
+    assert 'ci-pending' in html
+
+
+def test_html_detail_shows_last_merged_pr(tmp_path):
+    """Detail panel shows last merged PR link with date (EXPAND-03)."""
+    subs = [_make_sub("test-sub", "green", 3, last_merged_bot_pr={
+        "url": "https://github.com/sonic-net/sonic-buildimage/pull/99",
+        "merged_at": "2025-01-12T15:30:00Z",
+    })]
+    html = _render(tmp_path, _make_data(submodules=subs))
+    assert 'href="https://github.com/sonic-net/sonic-buildimage/pull/99"' in html
+    assert '2025-01-12' in html
+
+
+def test_html_detail_shows_latest_commit(tmp_path):
+    """Detail panel shows latest repo commit link with date (EXPAND-04)."""
+    subs = [_make_sub("test-sub", "green", 3, latest_repo_commit={
+        "url": "https://github.com/sonic-net/sonic-swss/commit/abc123",
+        "date": "2025-02-19T08:00:00Z",
+    })]
+    html = _render(tmp_path, _make_data(submodules=subs))
+    assert 'href="https://github.com/sonic-net/sonic-swss/commit/abc123"' in html
+    assert '2025-02-19' in html
+
+
+def test_html_detail_shows_avg_delay(tmp_path):
+    """Detail panel shows average delay metric (EXPAND-05)."""
+    subs = [_make_sub("test-sub", "green", 3, avg_delay_days=4.2)]
+    html = _render(tmp_path, _make_data(submodules=subs))
+    assert '4.2' in html
+
+
+def test_html_detail_null_avg_delay(tmp_path):
+    """Detail panel shows placeholder when avg delay is null (EXPAND-05)."""
+    html = _render(tmp_path)
+    assert 'Not enough data' in html
+
+
+def test_html_detail_colspan_matches_columns(tmp_path):
+    """Detail row colspan matches total column count (9 with toggle)."""
+    html = _render(tmp_path)
+    assert 'colspan="9"' in html
+
+
+def test_html_detail_dark_mode_styles(tmp_path):
+    """Dark mode CSS includes detail panel and CI status styles."""
+    html = _render(tmp_path)
+    dark_start = html.index("prefers-color-scheme: dark")
+    dark_section = html[dark_start:]
+    assert '.detail-panel' in dark_section
+    assert '.ci-pass' in dark_section
+    assert '.ci-fail' in dark_section
