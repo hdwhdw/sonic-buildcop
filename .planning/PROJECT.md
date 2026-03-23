@@ -4,28 +4,17 @@
 
 A build health dashboard for sonic-net/sonic-buildimage that tracks submodule staleness. Shows how far behind each sonic-net submodule pointer is, with cadence-aware thresholds derived from each submodule's development pace. Live at https://hdwhdw.github.io/sonic-buildcop/.
 
-## Current Milestone: v1.2 Detail Enrichment
-
-**Goal:** Add expandable detail rows to the dashboard showing bot PR status, pointer update history, and repo activity — making each row actionable without cluttering the main table.
-
-**Target features:**
-- Expandable detail rows (click to toggle inline panel)
-- Open bot PR status with CI pass/fail and link
-- Last pointer update (linked to merged bot PR)
-- Last repo update (linked to latest commit)
-- Average delay between repo commits and pointer bumps
-
 ## Current State
 
-**v1.1 shipped** — 2026-03-21 (+ post-release tweaks: bot-maintained filter, days-only classification, repo reorg)
+**v1.2 shipped** — 2026-03-23
 
-Dashboard tracks 16 bot-maintained sonic-net submodules with cadence-aware staleness badges, linked names/SHAs, dark mode support. 78 unit tests. Updated every 4 hours via GitHub Actions cron. Live at https://hdwhdw.github.io/sonic-buildcop/.
+Dashboard tracks 16 bot-maintained sonic-net submodules with cadence-aware staleness badges, expandable detail rows showing bot PR status/CI health/pointer history/repo activity/avg delay. 115 unit tests. Updated every 4 hours via GitHub Actions cron. Live at https://hdwhdw.github.io/sonic-buildcop/.
 
 ## Core Value
 
 Make submodule staleness visible and actionable — so maintainers catch drift early instead of discovering months-old pointers during crunch time.
 
-## Future Milestone Goals
+## Next Milestone Goals
 
 - GitHub Issues alerting for submodules that cross red threshold
 - Auto-close issues when pointer is updated
@@ -58,6 +47,10 @@ Make submodule staleness visible and actionable — so maintainers catch drift e
 | Dashboard first, alerting second | Need to validate the staleness model before sending notifications | ✅ Validated |
 | Python for all scripts | SONiC ecosystem consistency, pre-installed on runners | ✅ Validated |
 | Median not mean for cadence | Resists holiday gaps and burst outliers | ✅ Validated |
+| Separate enrichment.py module | Follows staleness.py pattern — each data concern in its own module | ✅ Shipped |
+| Batch PR search via Search API | 30 req/min limit; 1-2 calls for all 16 submodules instead of 32 | ✅ Shipped |
+| Toggle icon in dedicated column | Avoids click-target conflict with existing row links | ✅ Shipped |
+| Vanilla JS for expandable rows | No framework needed for ~15 lines of DOM toggle | ✅ Shipped |
 
 ---
 *Last updated: 2026-03-21 after v1.1 milestone completion*

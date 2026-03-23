@@ -4,7 +4,7 @@
 
 - ✅ **v1.0** — Submodule Staleness Dashboard (Phases 1-3, 7 plans) → [Archive](milestones/v1.0-ROADMAP.md)
 - ✅ **v1.1** — Dashboard Polish (Phases 4-5, 4 plans) → [Archive](milestones/v1.1-ROADMAP.md)
-- 🚧 **v1.2** — Detail Enrichment (Phases 6-7)
+- ✅ **v1.2** — Detail Enrichment (Phases 6-7, 3 plans) → [Archive](milestones/v1.2-ROADMAP.md)
 
 ## Phases
 
@@ -29,44 +29,15 @@ See [v1.1 Archive](milestones/v1.1-ROADMAP.md) for full details.
 
 </details>
 
-### 🚧 v1.2 Detail Enrichment
+<details>
+<summary>✅ v1.2 Detail Enrichment (Phases 6-7) — SHIPPED 2026-03-23</summary>
 
-**Milestone Goal:** Add expandable detail rows showing bot PR status, pointer update history, and repo activity — making each row actionable without cluttering the main table.
+- [x] **Phase 6: Data Enrichment** — Bot PR status, latest repo commits, average update delay
+- [x] **Phase 7: Expandable Detail Rows** — Toggle icon, inline detail panels, Expand All, dark mode CSS
 
-- [ ] **Phase 6: Data Enrichment** — Collector fetches bot PR status, latest repo commits, and computes update delay
-- [ ] **Phase 7: Expandable Detail Rows** — Clickable rows with inline detail panel showing PR status, pointer history, repo activity
+See [v1.2 Archive](milestones/v1.2-ROADMAP.md) for full details.
 
-## Phase Details
-
-### Phase 6: Data Enrichment
-**Goal**: Collector outputs all detail data that expandable rows will display
-**Depends on**: Phase 5 (existing collector infrastructure)
-**Requirements**: ENRICH-01, ENRICH-02, ENRICH-03, ENRICH-04
-**Success Criteria** (what must be TRUE):
-  1. Running the collector produces JSON containing open bot PR info (URL, age, CI status) for each submodule that has one, and null for those without
-  2. JSON includes the last merged bot PR (URL, merge date) for each submodule
-  3. JSON includes the latest commit (URL, date) from each submodule's own repo
-  4. JSON includes average delay in days between repo commits and pointer bumps for each submodule
-**Plans**: 2 plans
-
-Plans:
-- [ ] 06-01-PLAN.md — Bot PR enrichment + latest commits (ENRICH-01, ENRICH-02, ENRICH-03)
-- [ ] 06-02-PLAN.md — Average delay + collector integration (ENRICH-04)
-
-### Phase 7: Expandable Detail Rows
-**Goal**: Users can click any dashboard row to see actionable detail without leaving the page
-**Depends on**: Phase 6
-**Requirements**: EXPAND-01, EXPAND-02, EXPAND-03, EXPAND-04, EXPAND-05
-**Success Criteria** (what must be TRUE):
-  1. Clicking a submodule row toggles an inline detail panel below it; clicking again collapses it
-  2. Detail panel shows open bot PR with clickable link, age badge, and CI status (pass/fail/pending) — or "No open PR" if none exists
-  3. Detail panel shows last pointer update date linked to the merged bot PR
-  4. Detail panel shows last repo commit date linked to the commit on GitHub
-  5. Detail panel shows average delay between repo commits and pointer bumps
-**Plans**: 1 plan
-
-Plans:
-- [ ] 07-01-PLAN.md — Toggle mechanism, detail panel with enrichment data, CSS/JS, and tests (EXPAND-01..05)
+</details>
 
 ## Progress
 
@@ -77,5 +48,5 @@ Plans:
 | 3. Dashboard UI | v1.0 | 2/2 | Complete | 2026-03-21 |
 | 4. Data Expansion | v1.1 | 2/2 | Complete | 2026-03-21 |
 | 5. Visual Overhaul & Linkification | v1.1 | 2/2 | Complete | 2026-03-21 |
-| 6. Data Enrichment | v1.2 | 0/? | Not started | - |
-| 7. Expandable Detail Rows | v1.2 | 0/? | Not started | - |
+| 6. Data Enrichment | v1.2 | 2/2 | Complete | 2026-03-23 |
+| 7. Expandable Detail Rows | v1.2 | 1/1 | Complete | 2026-03-23 |
