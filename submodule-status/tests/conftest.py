@@ -199,3 +199,153 @@ def sample_submodule_unavailable():
         "status": "unavailable",
         "error": "API down",
     }
+
+
+# ---------------------------------------------------------------------------
+# Phase 6: Enrichment module fixtures
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def sample_submodule_list():
+    """Two ok submodules + one unavailable for enrichment testing."""
+    return [
+        {
+            "name": "sonic-swss",
+            "path": "src/sonic-swss",
+            "url": "https://github.com/sonic-net/sonic-swss",
+            "owner": "sonic-net",
+            "repo": "sonic-swss",
+            "branch": "master",
+            "status": "ok",
+            "error": None,
+        },
+        {
+            "name": "sonic-swss-common",
+            "path": "src/sonic-swss-common",
+            "url": "https://github.com/sonic-net/sonic-swss-common",
+            "owner": "sonic-net",
+            "repo": "sonic-swss-common",
+            "branch": "master",
+            "status": "ok",
+            "error": None,
+        },
+        {
+            "name": "sonic-sairedis",
+            "path": "src/sonic-sairedis",
+            "url": "https://github.com/sonic-net/sonic-sairedis",
+            "owner": "sonic-net",
+            "repo": "sonic-sairedis",
+            "branch": "master",
+            "status": "unavailable",
+            "error": "API down",
+        },
+    ]
+
+
+@pytest.fixture
+def mock_search_open_prs():
+    """Mock GitHub Search Issues API response — 2 open bot PRs."""
+    return {
+        "total_count": 2,
+        "items": [
+            {
+                "number": 101,
+                "title": "[submodule] Update submodule src/sonic-swss to latest",
+                "html_url": "https://github.com/sonic-net/sonic-buildimage/pull/101",
+                "created_at": "2025-02-15T10:00:00Z",
+                "pull_request": {"merged_at": None},
+            },
+            {
+                "number": 102,
+                "title": "[submodule] Update submodule src/sonic-swss-common to latest",
+                "html_url": "https://github.com/sonic-net/sonic-buildimage/pull/102",
+                "created_at": "2025-02-18T10:00:00Z",
+                "pull_request": {"merged_at": None},
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def mock_search_merged_prs():
+    """Mock GitHub Search Issues API response — 1 merged bot PR."""
+    return {
+        "total_count": 1,
+        "items": [
+            {
+                "number": 99,
+                "title": "[submodule] Update submodule src/sonic-swss to latest",
+                "html_url": "https://github.com/sonic-net/sonic-buildimage/pull/99",
+                "created_at": "2025-01-10T10:00:00Z",
+                "pull_request": {"merged_at": "2025-01-12T15:30:00Z"},
+            },
+        ],
+    }
+
+
+@pytest.fixture
+def mock_check_runs_all_pass():
+    """Mock Check Runs API — all checks passed."""
+    return {
+        "total_count": 3,
+        "check_runs": [
+            {"name": "build", "status": "completed", "conclusion": "success"},
+            {"name": "lint", "status": "completed", "conclusion": "success"},
+            {"name": "test", "status": "completed", "conclusion": "neutral"},
+        ],
+    }
+
+
+@pytest.fixture
+def mock_check_runs_one_fail():
+    """Mock Check Runs API — one check failed."""
+    return {
+        "total_count": 3,
+        "check_runs": [
+            {"name": "build", "status": "completed", "conclusion": "success"},
+            {"name": "lint", "status": "completed", "conclusion": "failure"},
+            {"name": "test", "status": "completed", "conclusion": "success"},
+        ],
+    }
+
+
+@pytest.fixture
+def mock_check_runs_pending():
+    """Mock Check Runs API — one check still running."""
+    return {
+        "total_count": 2,
+        "check_runs": [
+            {"name": "build", "status": "completed", "conclusion": "success"},
+            {"name": "test", "status": "in_progress", "conclusion": None},
+        ],
+    }
+
+
+@pytest.fixture
+def mock_check_runs_empty():
+    """Mock Check Runs API — no checks configured."""
+    return {"total_count": 0, "check_runs": []}
+
+
+@pytest.fixture
+def mock_latest_commit_response():
+    """Mock GitHub Commits API response for HEAD commit with html_url."""
+    return {
+        "sha": "def456abc789",
+        "html_url": "https://github.com/sonic-net/sonic-swss/commit/def456abc789",
+        "commit": {
+            "committer": {
+                "date": "2025-02-19T08:00:00Z"
+            }
+        },
+    }
+
+
+@pytest.fixture
+def mock_pr_detail_response():
+    """Mock GitHub Pull Request API response with head SHA."""
+    return {
+        "number": 101,
+        "head": {"sha": "abc123headsha"},
+    }
