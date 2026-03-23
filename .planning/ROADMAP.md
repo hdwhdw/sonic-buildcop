@@ -47,11 +47,11 @@ See [v1.1 Archive](milestones/v1.1-ROADMAP.md) for full details.
   2. JSON includes the last merged bot PR (URL, merge date) for each submodule
   3. JSON includes the latest commit (URL, date) from each submodule's own repo
   4. JSON includes average delay in days between repo commits and pointer bumps for each submodule
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: TBD
-- [ ] 06-02: TBD
+- [ ] 06-01-PLAN.md — Bot PR enrichment + latest commits (ENRICH-01, ENRICH-02, ENRICH-03)
+- [ ] 06-02-PLAN.md — Average delay + collector integration (ENRICH-04)
 
 ### Phase 7: Expandable Detail Rows
 **Goal**: Users can click any dashboard row to see actionable detail without leaving the page
