@@ -2,16 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Detail Enrichment
-status: ready_to_plan
-stopped_at: Roadmap created for v1.2
-last_updated: "2026-03-21"
-last_activity: 2026-03-21 — Roadmap created for v1.2 Detail Enrichment
+status: unknown
+stopped_at: Completed 06-01-PLAN.md — enrichment.py with 5 functions, 16 tests, ready for 06-02 integration
+last_updated: "2026-03-23T16:29:15.300Z"
 progress:
   total_phases: 2
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_plans: 2
+  completed_plans: 1
 ---
 
 # Project State
@@ -21,16 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-21)
 
 **Core value:** Make submodule staleness visible and actionable — so maintainers catch drift early instead of discovering months-old pointers during crunch time.
-**Current focus:** Phase 6 — Data Enrichment (ready to plan)
+**Current focus:** Phase 06 — data-enrichment
 
 ## Current Position
 
-Phase: 6 of 7 (Data Enrichment)
-Plan: —
-Status: Ready to plan
-Last activity: 2026-03-21 — Roadmap created for v1.2 Detail Enrichment
-
-Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
+Phase: 06 (data-enrichment) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -49,6 +43,7 @@ Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 | 3. Dashboard UI | 2 | — | — |
 | 4. Data Expansion | 2 | ~7min | ~3.5min |
 | 5. Visual Overhaul | 2 | ~4min | ~2min |
+| Phase 06-01 P01 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -64,6 +59,9 @@ Recent decisions affecting current work:
 - [v1.1] CSS-only dark mode via prefers-color-scheme — no JavaScript toggle
 - [v1.1] Pill badges with dot indicators replace uppercase text labels
 - [v1.2] Data collection phase before UI phase (ENRICH before EXPAND)
+- [Phase 06-01]: Batch Search API calls (1 open, 1 merged) instead of per-submodule PR lookups
+- [Phase 06-01]: Longest-first name sorting prevents sonic-swss matching before sonic-swss-common
+- [Phase 06-01]: Check Runs API aggregation: fail > pending > pass priority, null for no checks
 
 ### Blockers/Concerns
 
@@ -71,6 +69,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-21
-Stopped at: Roadmap created for v1.2 — ready to plan Phase 6
+Last session: 2026-03-23T16:29:15.298Z
+Stopped at: Completed 06-01-PLAN.md — enrichment.py with 5 functions, 16 tests, ready for 06-02 integration
 Resume file: None
