@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Dashboard Polish
-status: completed
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-03-21T06:30:18.340Z"
-last_activity: 2026-03-21 — Completed 04-02 cadence columns and relative timestamps
+milestone: v1.2
+milestone_name: Detail Enrichment
+status: defining_requirements
+stopped_at: —
+last_updated: "2026-03-21"
+last_activity: 2026-03-21 — Milestone v1.2 started
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
-  percent: 80
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-21)
 
 **Core value:** Make submodule staleness visible and actionable — so maintainers catch drift early instead of discovering months-old pointers during crunch time.
-**Current focus:** Phase 4 — Data Expansion (v1.1)
+**Current focus:** Defining requirements for v1.2
 
 ## Current Position
 
-Phase: 4 of 5 (Data Expansion)
-Plan: 2 of 2
-Status: Phase 4 complete
-Last activity: 2026-03-21 — Completed 04-02 cadence columns and relative timestamps
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-21 — Milestone v1.2 started
 
-Progress: [████████████████░░░░] 80% (Phase 4 complete, Phase 5 remaining)
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
