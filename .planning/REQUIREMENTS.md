@@ -47,20 +47,20 @@ Requirements for v1.2 Detail Enrichment. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ENRICH-01 | — | Pending |
-| ENRICH-02 | — | Pending |
-| ENRICH-03 | — | Pending |
-| ENRICH-04 | — | Pending |
-| EXPAND-01 | — | Pending |
-| EXPAND-02 | — | Pending |
-| EXPAND-03 | — | Pending |
-| EXPAND-04 | — | Pending |
-| EXPAND-05 | — | Pending |
+| ENRICH-01 | Phase 6 | Pending |
+| ENRICH-02 | Phase 6 | Pending |
+| ENRICH-03 | Phase 6 | Pending |
+| ENRICH-04 | Phase 6 | Pending |
+| EXPAND-01 | Phase 7 | Pending |
+| EXPAND-02 | Phase 7 | Pending |
+| EXPAND-03 | Phase 7 | Pending |
+| EXPAND-04 | Phase 7 | Pending |
+| EXPAND-05 | Phase 7 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 9 total
-- Mapped to phases: 0
-- Unmapped: 9 ⚠️
+- Mapped to phases: 9
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-21*
