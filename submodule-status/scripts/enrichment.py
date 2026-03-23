@@ -1,15 +1,20 @@
 """Data enrichment module for submodule detail information.
 
-Fetches bot PR status, latest repo commits, and CI check status for each
-submodule. Follows the staleness.py pattern: enrich submodule dicts in-place.
+Fetches bot PR status, latest repo commits, CI check status, and average
+delay for each submodule. Follows the staleness.py pattern: enrich
+submodule dicts in-place.
 
 Exports:
-    match_pr_to_submodule     — match a PR title to a submodule name (longest-first)
-    get_ci_status_for_pr      — aggregate CI check-run status for a PR
-    fetch_open_bot_prs        — batch-fetch open bot PRs and enrich submodules
-    fetch_merged_bot_prs      — batch-fetch merged bot PRs and enrich submodules
-    fetch_latest_repo_commits — fetch latest commit from each submodule's repo
+    match_pr_to_submodule           — match a PR title to a submodule name (longest-first)
+    get_ci_status_for_pr            — aggregate CI check-run status for a PR
+    fetch_open_bot_prs              — batch-fetch open bot PRs and enrich submodules
+    fetch_merged_bot_prs            — batch-fetch merged bot PRs and enrich submodules
+    fetch_latest_repo_commits       — fetch latest commit from each submodule's repo
+    compute_avg_delay_for_submodule — compute mean delay for a single submodule
+    compute_avg_delay               — compute mean delay for all submodules in-place
+    enrich_with_details             — main entry point calling all enrichment functions
 """
+import statistics
 import time
 from datetime import datetime, timezone
 
@@ -251,3 +256,120 @@ def fetch_latest_repo_commits(
             sub["latest_repo_commit"] = None
 
         time.sleep(0.5)
+
+
+def compute_avg_delay_for_submodule(
+    session: requests.Session,
+    submodule_path: str,
+    sub_owner: str,
+    sub_repo: str,
+    num_bumps: int = 5,
+) -> float | None:
+    """Compute average delay between repo commits and pointer bumps.
+
+    Looks at the last ``num_bumps`` commits in sonic-buildimage that touched
+    the submodule path, determines what SHA each bump pointed to, and
+    computes the delay between that SHA's commit date and the bump date.
+
+    Returns mean delay in days (rounded to 1 decimal), or ``None`` if fewer
+    than 2 valid data points.
+    """
+    # Step 1: Get bump history from parent repo
+    url = f"{API_BASE}/repos/{PARENT_OWNER}/{PARENT_REPO}/commits"
+    params = {"path": submodule_path, "per_page": num_bumps}
+    try:
+        resp = session.get(url, params=params)
+        resp.raise_for_status()
+        bumps = resp.json()
+    except (requests.RequestException, KeyError, ValueError):
+        return None
+
+    if len(bumps) < 2:
+        return None
+
+    delays: list[float] = []
+    for bump in bumps:
+        try:
+            bump_date_str = bump["commit"]["committer"]["date"]
+            bump_date = datetime.fromisoformat(
+                bump_date_str.replace("Z", "+00:00")
+            )
+            bump_sha = bump["sha"]
+
+            # Step 2: Get submodule SHA at this bump
+            contents_url = (
+                f"{API_BASE}/repos/{PARENT_OWNER}/{PARENT_REPO}"
+                f"/contents/{submodule_path}"
+            )
+            contents_resp = session.get(contents_url, params={"ref": bump_sha})
+            contents_resp.raise_for_status()
+            sub_sha = contents_resp.json()["sha"]
+
+            # Step 3: Get submodule commit date
+            commit_url = (
+                f"{API_BASE}/repos/{sub_owner}/{sub_repo}/commits/{sub_sha}"
+            )
+            commit_resp = session.get(commit_url)
+            commit_resp.raise_for_status()
+            commit_date_str = commit_resp.json()["commit"]["committer"]["date"]
+            commit_date = datetime.fromisoformat(
+                commit_date_str.replace("Z", "+00:00")
+            )
+
+            # Step 4: Compute delay (filter negatives per Pitfall 5)
+            delay_days = (bump_date - commit_date).total_seconds() / 86400
+            if delay_days >= 0:
+                delays.append(delay_days)
+
+        except (requests.RequestException, KeyError, ValueError):
+            continue  # Skip this bump, try next
+
+        time.sleep(0.5)
+
+    if len(delays) < 2:
+        return None
+
+    return round(statistics.mean(delays), 1)
+
+
+def compute_avg_delay(
+    session: requests.Session,
+    submodules: list[dict],
+) -> None:
+    """Compute average delay for each submodule in-place.
+
+    For each submodule with ``status='ok'``, computes the average delay
+    between repo commits and pointer bumps. Sets ``avg_delay_days`` to
+    the result (float or ``None``).
+    """
+    for sub in submodules:
+        if sub["status"] != "ok":
+            sub["avg_delay_days"] = None
+            continue
+
+        try:
+            sub["avg_delay_days"] = compute_avg_delay_for_submodule(
+                session,
+                sub["path"],
+                sub["owner"],
+                sub["repo"],
+            )
+        except (requests.RequestException, KeyError, ValueError):
+            sub["avg_delay_days"] = None
+
+        time.sleep(0.5)
+
+
+def enrich_with_details(
+    session: requests.Session,
+    submodules: list[dict],
+) -> None:
+    """Main enrichment entry point — enrich submodule dicts in-place.
+
+    Called from collector.py main() after enrich_with_staleness().
+    Adds: open_bot_pr, last_merged_bot_pr, latest_repo_commit, avg_delay_days.
+    """
+    fetch_open_bot_prs(session, submodules)
+    fetch_merged_bot_prs(session, submodules)
+    fetch_latest_repo_commits(session, submodules)
+    compute_avg_delay(session, submodules)
