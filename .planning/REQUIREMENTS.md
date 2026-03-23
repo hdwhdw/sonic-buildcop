@@ -12,7 +12,7 @@ Requirements for v1.2 Detail Enrichment. Each maps to roadmap phases.
 - [x] **ENRICH-01**: Collector fetches open bot PR (from mssonicbld) for each submodule in sonic-buildimage
 - [x] **ENRICH-02**: Collector fetches last merged bot PR for each submodule
 - [x] **ENRICH-03**: Collector fetches latest commit date from each submodule's own repo
-- [ ] **ENRICH-04**: Collector computes average delay between repo commits and pointer bumps
+- [x] **ENRICH-04**: Collector computes average delay between repo commits and pointer bumps
 
 ### Expandable UI
 
@@ -50,7 +50,7 @@ Requirements for v1.2 Detail Enrichment. Each maps to roadmap phases.
 | ENRICH-01 | Phase 6 | Complete |
 | ENRICH-02 | Phase 6 | Complete |
 | ENRICH-03 | Phase 6 | Complete |
-| ENRICH-04 | Phase 6 | Pending |
+| ENRICH-04 | Phase 6 | Complete |
 | EXPAND-01 | Phase 7 | Pending |
 | EXPAND-02 | Phase 7 | Pending |
 | EXPAND-03 | Phase 7 | Pending |

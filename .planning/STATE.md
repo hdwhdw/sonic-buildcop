@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Detail Enrichment
 status: unknown
-stopped_at: Completed 06-01-PLAN.md — enrichment.py with 5 functions, 16 tests, ready for 06-02 integration
-last_updated: "2026-03-23T16:29:15.300Z"
+stopped_at: Completed 06-02-PLAN.md — all ENRICH requirements done, enrichment wired into collector.py
+last_updated: "2026-03-23T16:37:32.313Z"
 progress:
   total_phases: 2
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
+  completed_plans: 2
 ---
 
 # Project State
@@ -44,6 +44,7 @@ Plan: 2 of 2
 | 4. Data Expansion | 2 | ~7min | ~3.5min |
 | 5. Visual Overhaul | 2 | ~4min | ~2min |
 | Phase 06-01 P01 | 4min | 2 tasks | 3 files |
+| Phase 06 P02 | 4min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,9 @@ Recent decisions affecting current work:
 - [Phase 06-01]: Batch Search API calls (1 open, 1 merged) instead of per-submodule PR lookups
 - [Phase 06-01]: Longest-first name sorting prevents sonic-swss matching before sonic-swss-common
 - [Phase 06-01]: Check Runs API aggregation: fail > pending > pass priority, null for no checks
+- [Phase 06]: isinstance guard on bump commits response for API robustness
+- [Phase 06]: enrich_with_details is single orchestrator for all 4 enrichment sub-functions
+- [Phase 06]: Minimum 2 valid data points for avg_delay_days, else None
 
 ### Blockers/Concerns
 
@@ -69,6 +73,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-23T16:29:15.298Z
-Stopped at: Completed 06-01-PLAN.md — enrichment.py with 5 functions, 16 tests, ready for 06-02 integration
+Last session: 2026-03-23T16:37:32.310Z
+Stopped at: Completed 06-02-PLAN.md — all ENRICH requirements done, enrichment wired into collector.py
 Resume file: None
