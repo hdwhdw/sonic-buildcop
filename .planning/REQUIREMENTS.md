@@ -16,11 +16,11 @@ Requirements for v1.2 Detail Enrichment. Each maps to roadmap phases.
 
 ### Expandable UI
 
-- [ ] **EXPAND-01**: Dashboard rows are clickable to expand/collapse an inline detail panel
-- [ ] **EXPAND-02**: Detail panel shows open bot PR with link, age, and CI status (pass/fail/pending)
-- [ ] **EXPAND-03**: Detail panel shows last pointer update linked to the merged bot PR
-- [ ] **EXPAND-04**: Detail panel shows last repo commit linked to the commit
-- [ ] **EXPAND-05**: Detail panel shows average delay metric
+- [x] **EXPAND-01**: Dashboard rows are clickable to expand/collapse an inline detail panel
+- [x] **EXPAND-02**: Detail panel shows open bot PR with link, age, and CI status (pass/fail/pending)
+- [x] **EXPAND-03**: Detail panel shows last pointer update linked to the merged bot PR
+- [x] **EXPAND-04**: Detail panel shows last repo commit linked to the commit
+- [x] **EXPAND-05**: Detail panel shows average delay metric
 
 ## Future Requirements
 
@@ -51,11 +51,11 @@ Requirements for v1.2 Detail Enrichment. Each maps to roadmap phases.
 | ENRICH-02 | Phase 6 | Complete |
 | ENRICH-03 | Phase 6 | Complete |
 | ENRICH-04 | Phase 6 | Complete |
-| EXPAND-01 | Phase 7 | Pending |
-| EXPAND-02 | Phase 7 | Pending |
-| EXPAND-03 | Phase 7 | Pending |
-| EXPAND-04 | Phase 7 | Pending |
-| EXPAND-05 | Phase 7 | Pending |
+| EXPAND-01 | Phase 7 | Complete |
+| EXPAND-02 | Phase 7 | Complete |
+| EXPAND-03 | Phase 7 | Complete |
+| EXPAND-04 | Phase 7 | Complete |
+| EXPAND-05 | Phase 7 | Complete |
 
 **Coverage:**
 - v1.2 requirements: 9 total
