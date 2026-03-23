@@ -63,11 +63,10 @@ Plans:
   3. Detail panel shows last pointer update date linked to the merged bot PR
   4. Detail panel shows last repo commit date linked to the commit on GitHub
   5. Detail panel shows average delay between repo commits and pointer bumps
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 07-01: TBD
-- [ ] 07-02: TBD
+- [ ] 07-01-PLAN.md — Toggle mechanism, detail panel with enrichment data, CSS/JS, and tests (EXPAND-01..05)
 
 ## Progress
 
