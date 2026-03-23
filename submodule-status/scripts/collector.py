@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 import requests
 
 from staleness import enrich_with_staleness
+from enrichment import enrich_with_details
 
 REPO_OWNER = "sonic-net"
 PARENT_REPO = "sonic-buildimage"
@@ -243,6 +244,9 @@ def main():
 
     # Enrich with cadence-aware staleness classification
     enrich_with_staleness(session, results)
+
+    # Enrich with detail data (bot PRs, latest commits, avg delay)
+    enrich_with_details(session, results)
 
     # Write output
     output = {

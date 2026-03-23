@@ -349,3 +349,46 @@ def mock_pr_detail_response():
         "number": 101,
         "head": {"sha": "abc123headsha"},
     }
+
+
+# ---------------------------------------------------------------------------
+# Phase 6 Plan 02: Average delay fixtures
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def mock_bump_commits():
+    """Mock pointer bump commits in sonic-buildimage for a submodule path."""
+    return [
+        {
+            "sha": "bump_sha_1",
+            "commit": {"committer": {"date": "2025-02-10T12:00:00Z"}},
+        },
+        {
+            "sha": "bump_sha_2",
+            "commit": {"committer": {"date": "2025-02-05T12:00:00Z"}},
+        },
+        {
+            "sha": "bump_sha_3",
+            "commit": {"committer": {"date": "2025-01-30T12:00:00Z"}},
+        },
+    ]
+
+
+@pytest.fixture
+def mock_contents_at_bump():
+    """Mock Contents API response showing submodule SHA at a bump ref."""
+    return {
+        "type": "submodule",
+        "sha": "sub_commit_sha_abc",
+    }
+
+
+@pytest.fixture
+def mock_sub_commit_dates():
+    """Three submodule commit date responses — delays of 2, 3, and 4 days."""
+    return [
+        {"commit": {"committer": {"date": "2025-02-08T12:00:00Z"}}},  # 2 days before bump_sha_1
+        {"commit": {"committer": {"date": "2025-02-02T12:00:00Z"}}},  # 3 days before bump_sha_2
+        {"commit": {"committer": {"date": "2025-01-26T12:00:00Z"}}},  # 4 days before bump_sha_3
+    ]

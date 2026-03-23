@@ -269,3 +269,175 @@ def test_fetch_latest_repo_commits_api_error(mock_sleep):
     fetch_latest_repo_commits(session, submodules)
 
     assert submodules[0]["latest_repo_commit"] is None
+
+
+# ---------------------------------------------------------------------------
+# ENRICH-04: Average delay tests
+# ---------------------------------------------------------------------------
+
+
+@patch("enrichment.time.sleep")
+def test_compute_avg_delay_for_submodule(
+    mock_sleep, mock_bump_commits, mock_contents_at_bump, mock_sub_commit_dates
+):
+    """compute_avg_delay_for_submodule returns mean delay from 3 bumps."""
+    session = MagicMock(spec=requests.Session)
+
+    # Build response chain: bump_commits, then for each bump: contents + sub_commit
+    resp_bumps = MagicMock()
+    resp_bumps.json.return_value = mock_bump_commits
+
+    responses = [resp_bumps]
+    for sub_date in mock_sub_commit_dates:
+        resp_contents = MagicMock()
+        resp_contents.json.return_value = mock_contents_at_bump
+        resp_sub = MagicMock()
+        resp_sub.json.return_value = sub_date
+        responses.extend([resp_contents, resp_sub])
+
+    session.get.side_effect = responses
+
+    result = compute_avg_delay_for_submodule(
+        session, "src/sonic-swss", "sonic-net", "sonic-swss"
+    )
+    assert result == 3.0  # mean(2, 3, 4) = 3.0
+
+
+@patch("enrichment.time.sleep")
+def test_compute_avg_delay_insufficient_bumps(mock_sleep):
+    """compute_avg_delay_for_submodule returns None with < 2 bumps."""
+    session = MagicMock(spec=requests.Session)
+
+    resp = MagicMock()
+    resp.json.return_value = [
+        {
+            "sha": "only_one",
+            "commit": {"committer": {"date": "2025-02-10T12:00:00Z"}},
+        }
+    ]
+    session.get.return_value = resp
+
+    result = compute_avg_delay_for_submodule(
+        session, "src/sonic-swss", "sonic-net", "sonic-swss"
+    )
+    assert result is None
+
+
+@patch("enrichment.time.sleep")
+def test_compute_avg_delay_negative_filtered(mock_sleep):
+    """Negative delays are filtered out; mean uses only positive values."""
+    session = MagicMock(spec=requests.Session)
+
+    # 3 bumps: delays of +2, -1 (negative, filtered), +4
+    bump_commits = [
+        {"sha": "b1", "commit": {"committer": {"date": "2025-02-10T12:00:00Z"}}},
+        {"sha": "b2", "commit": {"committer": {"date": "2025-02-05T12:00:00Z"}}},
+        {"sha": "b3", "commit": {"committer": {"date": "2025-01-30T12:00:00Z"}}},
+    ]
+    contents_resp = {"type": "submodule", "sha": "sub_sha"}
+    # Sub commit dates: 2 days before b1, 1 day AFTER b2 (negative), 4 days before b3
+    sub_dates = [
+        {"commit": {"committer": {"date": "2025-02-08T12:00:00Z"}}},  # +2 days
+        {"commit": {"committer": {"date": "2025-02-06T12:00:00Z"}}},  # -1 day (negative)
+        {"commit": {"committer": {"date": "2025-01-26T12:00:00Z"}}},  # +4 days
+    ]
+
+    resp_bumps = MagicMock()
+    resp_bumps.json.return_value = bump_commits
+
+    responses = [resp_bumps]
+    for sd in sub_dates:
+        rc = MagicMock()
+        rc.json.return_value = contents_resp
+        rs = MagicMock()
+        rs.json.return_value = sd
+        responses.extend([rc, rs])
+
+    session.get.side_effect = responses
+
+    result = compute_avg_delay_for_submodule(
+        session, "src/sonic-swss", "sonic-net", "sonic-swss"
+    )
+    assert result == 3.0  # mean(2, 4) = 3.0, -1 filtered out
+
+
+@patch("enrichment.time.sleep")
+def test_compute_avg_delay_all_negative(mock_sleep):
+    """All delays negative → returns None."""
+    session = MagicMock(spec=requests.Session)
+
+    bump_commits = [
+        {"sha": "b1", "commit": {"committer": {"date": "2025-02-05T12:00:00Z"}}},
+        {"sha": "b2", "commit": {"committer": {"date": "2025-01-30T12:00:00Z"}}},
+    ]
+    contents_resp = {"type": "submodule", "sha": "sub_sha"}
+    # Sub commit dates AFTER bump dates → negative delays
+    sub_dates = [
+        {"commit": {"committer": {"date": "2025-02-10T12:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-02-05T12:00:00Z"}}},
+    ]
+
+    resp_bumps = MagicMock()
+    resp_bumps.json.return_value = bump_commits
+
+    responses = [resp_bumps]
+    for sd in sub_dates:
+        rc = MagicMock()
+        rc.json.return_value = contents_resp
+        rs = MagicMock()
+        rs.json.return_value = sd
+        responses.extend([rc, rs])
+
+    session.get.side_effect = responses
+
+    result = compute_avg_delay_for_submodule(
+        session, "src/sonic-swss", "sonic-net", "sonic-swss"
+    )
+    assert result is None
+
+
+@patch("enrichment.time.sleep")
+def test_compute_avg_delay_api_error(mock_sleep):
+    """API error during bump history fetch → returns None."""
+    session = MagicMock(spec=requests.Session)
+    session.get.side_effect = requests.RequestException("timeout")
+
+    result = compute_avg_delay_for_submodule(
+        session, "src/sonic-swss", "sonic-net", "sonic-swss"
+    )
+    assert result is None
+
+
+@patch("enrichment.time.sleep")
+def test_compute_avg_delay_skips_unavailable(mock_sleep, sample_submodule_list):
+    """compute_avg_delay sets avg_delay_days=None for unavailable submodules."""
+    session = MagicMock(spec=requests.Session)
+
+    # Return empty bump list for ok submodules (→ None)
+    resp = MagicMock()
+    resp.json.return_value = []
+    session.get.return_value = resp
+
+    compute_avg_delay(session, sample_submodule_list)
+    # Unavailable submodule (index 2) gets None
+    assert sample_submodule_list[2]["avg_delay_days"] is None
+    # Ok submodules with no bumps also get None
+    assert sample_submodule_list[0]["avg_delay_days"] is None
+
+
+@patch("enrichment.compute_avg_delay")
+@patch("enrichment.fetch_latest_repo_commits")
+@patch("enrichment.fetch_merged_bot_prs")
+@patch("enrichment.fetch_open_bot_prs")
+def test_enrich_with_details(
+    mock_open, mock_merged, mock_latest, mock_delay, sample_submodule_list
+):
+    """enrich_with_details calls all 4 enrichment functions."""
+    session = MagicMock(spec=requests.Session)
+
+    enrich_with_details(session, sample_submodule_list)
+
+    mock_open.assert_called_once_with(session, sample_submodule_list)
+    mock_merged.assert_called_once_with(session, sample_submodule_list)
+    mock_latest.assert_called_once_with(session, sample_submodule_list)
+    mock_delay.assert_called_once_with(session, sample_submodule_list)

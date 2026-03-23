@@ -284,7 +284,7 @@ def compute_avg_delay_for_submodule(
     except (requests.RequestException, KeyError, ValueError):
         return None
 
-    if len(bumps) < 2:
+    if not isinstance(bumps, list) or len(bumps) < 2:
         return None
 
     delays: list[float] = []
