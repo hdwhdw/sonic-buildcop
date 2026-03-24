@@ -21,6 +21,8 @@ import requests
 
 MIN_BUMPS_FOR_CADENCE = 5
 MIN_MEDIAN_DAYS = 1.0
+MAX_YELLOW_DAYS = 30
+MAX_RED_DAYS = 60
 
 FALLBACK_THRESHOLDS = {
     "yellow_days": 30,
@@ -113,7 +115,7 @@ def compute_cadence(bump_dates: list[datetime]) -> dict:
 def compute_thresholds(cadence: dict) -> dict:
     """Derive yellow/red day thresholds from cadence data.
 
-    For normal repos: 2× median = yellow, 4× median = red (days).
+    For normal repos: 2× median = yellow, 4× median = red (days), capped at MAX_YELLOW_DAYS/MAX_RED_DAYS.
     For fallback repos (<5 commits): use FALLBACK_THRESHOLDS.
     """
     if cadence["is_fallback"]:
@@ -121,8 +123,8 @@ def compute_thresholds(cadence: dict) -> dict:
 
     m = cadence["median_days"]
     return {
-        "yellow_days": round(2 * m, 1),
-        "red_days": round(4 * m, 1),
+        "yellow_days": min(round(2 * m, 1), MAX_YELLOW_DAYS),
+        "red_days": min(round(4 * m, 1), MAX_RED_DAYS),
         "is_fallback": False,
     }
 

@@ -100,7 +100,7 @@ def test_compute_thresholds_frequent_repo():
 
 
 def test_compute_thresholds_slow_repo():
-    """median_days=8.0 → yellow_days=16.0, red_days=32.0."""
+    """median_days=8.0 → yellow_days=16.0, red_days=32.0 (under cap)."""
     cadence = {"median_days": 8.0, "commit_count": 15, "is_fallback": False}
     result = compute_thresholds(cadence)
     assert result["yellow_days"] == 16.0
