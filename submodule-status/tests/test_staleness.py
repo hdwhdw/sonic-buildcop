@@ -2,8 +2,10 @@
 from datetime import datetime, timezone, timedelta
 from unittest.mock import patch, MagicMock
 
+import requests
+
 from staleness import (
-    get_commit_dates,
+    get_bump_dates,
     compute_cadence,
     compute_thresholds,
     classify,
