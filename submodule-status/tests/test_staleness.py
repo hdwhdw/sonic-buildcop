@@ -116,6 +116,42 @@ def test_compute_thresholds_fallback():
     assert result["is_fallback"] is True
 
 
+def test_compute_thresholds_capped_very_slow_repo():
+    """median_days=20.0 → uncapped would be 40/80, capped to 30/60."""
+    cadence = {"median_days": 20.0, "commit_count": 15, "is_fallback": False}
+    result = compute_thresholds(cadence)
+    assert result["yellow_days"] == 30
+    assert result["red_days"] == 60
+    assert result["is_fallback"] is False
+
+
+def test_compute_thresholds_capped_boundary():
+    """median_days=14.0 → yellow=28.0 (under 30), red=56.0 (under 60) — no cap applied."""
+    cadence = {"median_days": 14.0, "commit_count": 10, "is_fallback": False}
+    result = compute_thresholds(cadence)
+    assert result["yellow_days"] == 28.0
+    assert result["red_days"] == 56.0
+    assert result["is_fallback"] is False
+
+
+def test_compute_thresholds_capped_both_hit():
+    """median_days=18.0 → yellow=min(36,30)=30, red=min(72,60)=60."""
+    cadence = {"median_days": 18.0, "commit_count": 15, "is_fallback": False}
+    result = compute_thresholds(cadence)
+    assert result["yellow_days"] == 30
+    assert result["red_days"] == 60
+    assert result["is_fallback"] is False
+
+
+def test_classify_with_capped_thresholds():
+    """Slow repo (median=125d) with 40 days behind → yellow (not green) due to cap."""
+    cadence = {"median_days": 125.0, "commit_count": 30, "is_fallback": False}
+    thresholds = compute_thresholds(cadence)
+    assert thresholds["yellow_days"] == 30
+    assert thresholds["red_days"] == 60
+    assert classify(40, thresholds) == "yellow"
+
+
 # ---------------------------------------------------------------------------
 # classify tests
 # ---------------------------------------------------------------------------
