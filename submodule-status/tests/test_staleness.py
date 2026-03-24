@@ -18,8 +18,8 @@ from staleness import (
 # ---------------------------------------------------------------------------
 
 
-def test_compute_cadence_regular_commits():
-    """10 commits 1 day apart → median_days=1.0, commit_count=10, is_fallback=False."""
+def test_compute_cadence_regular_bumps():
+    """10 bumps 1 day apart → median_days=1.0, commit_count=10, is_fallback=False."""
     base = datetime(2025, 8, 1, 10, 0, 0, tzinfo=timezone.utc)
     dates = [base + timedelta(days=i) for i in range(10)]
     result = compute_cadence(dates)
@@ -28,8 +28,8 @@ def test_compute_cadence_regular_commits():
     assert result["is_fallback"] is False
 
 
-def test_compute_cadence_weekly_commits():
-    """10 commits 7 days apart → median_days=7.0."""
+def test_compute_cadence_weekly_bumps():
+    """10 bumps 7 days apart → median_days=7.0."""
     base = datetime(2025, 8, 1, 10, 0, 0, tzinfo=timezone.utc)
     dates = [base + timedelta(days=i * 7) for i in range(10)]
     result = compute_cadence(dates)
@@ -49,8 +49,8 @@ def test_compute_cadence_median_resists_outliers():
     assert result["is_fallback"] is False
 
 
-def test_compute_cadence_fallback_few_commits():
-    """3 commits → is_fallback=True, median_days=None."""
+def test_compute_cadence_fallback_few_bumps():
+    """3 bumps → is_fallback=True, median_days=None."""
     base = datetime(2025, 8, 1, 10, 0, 0, tzinfo=timezone.utc)
     dates = [base + timedelta(days=i) for i in range(3)]
     result = compute_cadence(dates)
@@ -59,7 +59,7 @@ def test_compute_cadence_fallback_few_commits():
     assert result["is_fallback"] is True
 
 
-def test_compute_cadence_fallback_zero_commits():
+def test_compute_cadence_fallback_zero_bumps():
     """Empty list → is_fallback=True, median_days=None, commit_count=0."""
     result = compute_cadence([])
     assert result["median_days"] is None
@@ -68,7 +68,7 @@ def test_compute_cadence_fallback_zero_commits():
 
 
 def test_compute_cadence_minimum_floor():
-    """10 commits all within 1 hour (intervals ≈ 0) → median_days=1.0 (floor)."""
+    """10 bumps all within 1 hour (intervals ≈ 0) → median_days=1.0 (floor)."""
     base = datetime(2025, 8, 1, 10, 0, 0, tzinfo=timezone.utc)
     dates = [base + timedelta(minutes=i * 6) for i in range(10)]
     result = compute_cadence(dates)
@@ -198,7 +198,7 @@ def test_get_bump_dates_returns_sorted_dates(mock_bump_response):
 
 
 def test_get_bump_dates_empty_response():
-    """Empty commits list → returns []."""
+    """Empty bump list → returns []."""
     session = MagicMock()
     resp = MagicMock()
     resp.json.return_value = []
