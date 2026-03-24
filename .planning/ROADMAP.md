@@ -62,15 +62,18 @@ Plans:
 - [ ] 08-01-PLAN.md — Swap cadence data source to pointer bump intervals from sonic-buildimage
 
 ### Phase 9: Thresholds, Classification & Validation
-**Goal**: Staleness model uses corrected cadence for thresholds and classification, all tests validate new behavior
+**Goal**: Staleness model uses corrected cadence for thresholds and classification with caps, all tests validate new behavior
 **Depends on**: Phase 8
 **Requirements**: CAD-03, CAD-04, TEST-01, TEST-02, TEST-03
 **Success Criteria** (what must be TRUE):
-  1. Yellow threshold is 2× median bump cadence, red threshold is 4× median bump cadence
+  1. Yellow threshold is 2× median bump cadence, red threshold is 4× median bump cadence, capped at 30/60
   2. Staleness badges on the dashboard reflect thresholds derived from bump intervals
   3. All unit tests pass and validate cadence computation from pointer bump intervals
   4. No test references the old submodule-commit-based cadence definition
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 09-01-PLAN.md — Threshold caps + test validation and semantic cleanup
 
 ## Progress
 
