@@ -140,55 +140,56 @@ def test_classify_red_by_days():
 
 
 # ---------------------------------------------------------------------------
-# get_commit_dates tests (mocked)
+# get_bump_dates tests (mocked)
 # ---------------------------------------------------------------------------
 
 
-def test_get_commit_dates_single_page(mock_commits_page_1):
-    """5 commits on one page, no next link → returns 5 sorted datetimes."""
+def test_get_bump_dates_returns_sorted_dates(mock_bump_response):
+    """5 bump commits (unsorted) → returns 5 sorted ascending datetimes."""
     session = MagicMock()
     resp = MagicMock()
-    resp.json.return_value = mock_commits_page_1
-    resp.links = {}  # no next page
+    resp.json.return_value = mock_bump_response
     session.get.return_value = resp
 
-    dates = get_commit_dates(session, "sonic-net", "sonic-swss", "master")
+    dates = get_bump_dates(session, "src/sonic-swss")
     assert len(dates) == 5
     # Verify sorted ascending
     for i in range(len(dates) - 1):
         assert dates[i] <= dates[i + 1]
-    # Verify actual datetime objects
-    assert dates[0].year == 2025
-    assert dates[0].month == 8
-    assert dates[0].day == 1
+    # Verify actual datetime objects with correct dates
+    assert dates[0].day == 1  # Aug 1 is earliest
+    assert dates[-1].day == 5  # Aug 5 is latest
 
 
-def test_get_commit_dates_with_pagination(mock_commits_page_1, mock_commits_page_2):
-    """2 pages of commits → returns all 8 commits sorted."""
+def test_get_bump_dates_empty_response():
+    """Empty commits list → returns []."""
     session = MagicMock()
+    resp = MagicMock()
+    resp.json.return_value = []
+    session.get.return_value = resp
 
-    # Page 1 response: has next link
-    resp1 = MagicMock()
-    resp1.json.return_value = mock_commits_page_1
-    resp1.links = {
-        "next": {"url": "https://api.github.com/repos/sonic-net/sonic-swss/commits?page=2"}
-    }
+    dates = get_bump_dates(session, "src/sonic-swss")
+    assert dates == []
 
-    # Page 2 response: no next link
-    resp2 = MagicMock()
-    resp2.json.return_value = mock_commits_page_2
-    resp2.links = {}
 
-    session.get.side_effect = [resp1, resp2]
+def test_get_bump_dates_api_error():
+    """RequestException → returns []."""
+    session = MagicMock()
+    session.get.side_effect = requests.RequestException("timeout")
 
-    with patch("staleness.time.sleep"):
-        dates = get_commit_dates(session, "sonic-net", "sonic-swss", "master")
+    dates = get_bump_dates(session, "src/sonic-swss")
+    assert dates == []
 
-    assert len(dates) == 8
-    # Verify sorted ascending
-    for i in range(len(dates) - 1):
-        assert dates[i] <= dates[i + 1]
-    assert dates[-1].day == 8  # Aug 8 is last
+
+def test_get_bump_dates_non_list_response():
+    """Non-list response (e.g., API error dict) → returns []."""
+    session = MagicMock()
+    resp = MagicMock()
+    resp.json.return_value = {"message": "API rate limit exceeded"}
+    session.get.return_value = resp
+
+    dates = get_bump_dates(session, "src/sonic-swss")
+    assert dates == []
 
 
 # ---------------------------------------------------------------------------
@@ -197,9 +198,9 @@ def test_get_commit_dates_with_pagination(mock_commits_page_1, mock_commits_page
 
 
 @patch("staleness.time.sleep")
-@patch("staleness.get_commit_dates")
+@patch("staleness.get_bump_dates")
 def test_enrich_adds_staleness_fields(mock_get_dates, mock_sleep, sample_submodule_ok):
-    """Submodule with status=ok gets staleness fields added."""
+    """Submodule with status=ok gets staleness fields added via bump dates."""
     base = datetime(2025, 8, 1, 10, 0, 0, tzinfo=timezone.utc)
     mock_get_dates.return_value = [base + timedelta(days=i) for i in range(10)]
 
@@ -216,7 +217,7 @@ def test_enrich_adds_staleness_fields(mock_get_dates, mock_sleep, sample_submodu
 
 
 @patch("staleness.time.sleep")
-@patch("staleness.get_commit_dates")
+@patch("staleness.get_bump_dates")
 def test_enrich_skips_unavailable(mock_get_dates, mock_sleep, sample_submodule_unavailable):
     """Submodule with status=unavailable gets all staleness fields set to None."""
     submodules = [sample_submodule_unavailable]
@@ -227,5 +228,5 @@ def test_enrich_skips_unavailable(mock_get_dates, mock_sleep, sample_submodule_u
     assert sub["median_days"] is None
     assert sub["commit_count_6m"] is None
     assert sub["thresholds"] is None
-    # get_commit_dates should NOT have been called
+    # get_bump_dates should NOT have been called
     mock_get_dates.assert_not_called()

@@ -164,6 +164,18 @@ def mock_commits_page_2():
 
 
 @pytest.fixture
+def mock_bump_response():
+    """Mock sonic-buildimage commits API response — 5 pointer bump commits."""
+    return [
+        {"commit": {"committer": {"date": "2025-08-05T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-01T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-03T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-02T10:00:00Z"}}},
+        {"commit": {"committer": {"date": "2025-08-04T10:00:00Z"}}},
+    ]
+
+
+@pytest.fixture
 def sample_submodule_ok():
     """A single submodule dict with status='ok' — input to enrich_with_staleness."""
     return {
