@@ -1,13 +1,19 @@
 """Render data.json into a static HTML dashboard using Jinja2."""
 
 import json
+import logging
 import os
 from datetime import datetime, timezone
 
 from jinja2 import Environment, FileSystemLoader
 
+from buildcop_common.config import get as config_get
+from buildcop_common.log import setup_logging
+
 
 _TIER_ORDER = {"red": 0, "yellow": 1, "green": 2}
+
+logger = logging.getLogger(__name__)
 
 
 def sort_submodules(submodules: list[dict]) -> list[dict]:
@@ -98,14 +104,15 @@ def render_dashboard(data_path: str, site_dir: str) -> None:
     with open(os.path.join(site_dir, ".nojekyll"), "w") as f:
         pass
 
-    print(f"Dashboard rendered: {os.path.join(site_dir, 'index.html')}")
-    print(f"Submodules: {len(data['submodules'])}")
+    logger.info("Dashboard rendered: %s", os.path.join(site_dir, "index.html"))
+    logger.info("Submodules: %d", len(data["submodules"]))
 
 
 def main():
     """Entry point when run as script."""
-    data_path = os.environ.get("DATA_PATH", "data.json")
-    site_dir = os.environ.get("SITE_DIR", "site")
+    setup_logging()
+    data_path = config_get("DATA_PATH", str, "data.json")
+    site_dir = config_get("SITE_DIR", str, "site")
     render_dashboard(data_path, site_dir)
 
 
