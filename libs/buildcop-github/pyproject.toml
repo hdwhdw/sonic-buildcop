@@ -1,0 +1,13 @@
+[project]
+name = "buildcop-github"
+version = "0.1.0"
+description = "GitHub API client for SONiC build infrastructure tools"
+requires-python = ">=3.12"
+dependencies = ["buildcop-common"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+buildcop-common = { workspace = true }

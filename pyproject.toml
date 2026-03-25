@@ -1,0 +1,24 @@
+[project]
+name = "sonic-buildcop"
+version = "0.1.0"
+description = "SONiC build infrastructure tools"
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = ["libs/*", "apps/*"]
+
+[dependency-groups]
+dev = [
+    "buildcop-common",
+    "buildcop-github",
+    "buildcop-submodule-status",
+    "pytest>=8.0",
+]
+
+[tool.uv.sources]
+buildcop-common = { workspace = true }
+buildcop-github = { workspace = true }
+buildcop-submodule-status = { workspace = true }
+
+[tool.pytest.ini_options]
+testpaths = ["apps", "libs"]

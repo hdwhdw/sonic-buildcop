@@ -11,6 +11,9 @@ __pycache__/
 *.pyo
 .pytest_cache/
 
+# Virtual environment
+.venv/
+
 # IDE
 .vscode/
 .idea/

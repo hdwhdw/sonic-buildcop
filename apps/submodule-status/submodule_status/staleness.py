@@ -11,29 +11,35 @@ Exports:
     classify          — classify days/commits behind as green/yellow/red
     enrich_with_staleness — enrich submodule dicts with staleness fields
 """
+import logging
 import statistics
 import time
 from datetime import datetime, timezone, timedelta
 
 import requests
 
+from buildcop_common.config import (
+    API_BASE,
+    MAX_RED_DAYS,
+    MAX_YELLOW_DAYS,
+    MIN_BUMPS_FOR_CADENCE,
+    MIN_MEDIAN_DAYS,
+    NUM_BUMPS,
+    PARENT_OWNER,
+    PARENT_REPO,
+)
+from buildcop_common.exceptions import APIError
+from buildcop_common.github import check_response
+
 # --- Constants ---
 
-MIN_BUMPS_FOR_CADENCE = 5
-MIN_MEDIAN_DAYS = 1.0
-MAX_YELLOW_DAYS = 30
-MAX_RED_DAYS = 60
-
 FALLBACK_THRESHOLDS = {
-    "yellow_days": 30,
-    "red_days": 60,
+    "yellow_days": MAX_YELLOW_DAYS,
+    "red_days": MAX_RED_DAYS,
     "is_fallback": True,
 }
 
-API_BASE = "https://api.github.com"
-PARENT_OWNER = "sonic-net"
-PARENT_REPO = "sonic-buildimage"
-NUM_BUMPS = 30
+logger = logging.getLogger(__name__)
 
 
 # --- Functions ---
@@ -57,9 +63,10 @@ def get_bump_dates(
 
     try:
         resp = session.get(url, params=params)
-        resp.raise_for_status()
+        check_response(resp)
         commits = resp.json()
-    except (requests.RequestException, KeyError, ValueError):
+    except (APIError, requests.RequestException, KeyError, ValueError):
+        logger.warning("Failed to fetch bump dates for %s", submodule_path, exc_info=True)
         return []
 
     if not isinstance(commits, list):
@@ -175,7 +182,8 @@ def enrich_with_staleness(
             sub["commit_count_6m"] = cadence["commit_count"]
             sub["thresholds"] = thresholds
 
-        except (requests.RequestException, KeyError, ValueError):
+        except (APIError, requests.RequestException, KeyError, ValueError):
+            logger.warning("Staleness enrichment failed for %s", sub["name"], exc_info=True)
             sub["staleness_status"] = None
             sub["median_days"] = None
             sub["commit_count_6m"] = None
