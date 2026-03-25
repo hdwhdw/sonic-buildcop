@@ -75,10 +75,12 @@ Plans:
   3. GitHub Actions workflow runs successfully with uv-based setup and updated directory paths
   4. Generated dashboard HTML is identical to pre-migration output for the same input data
   5. Zero `sys.path.insert` calls remain anywhere in the codebase
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md — Migrate staleness.py + enrichment.py to core (constants, check_response, typed exceptions, logging)
+- [ ] 04-02-PLAN.md — Migrate collector.py + renderer.py to core (session factory, retry, env vars, logging)
+- [ ] 04-03-PLAN.md — Update GitHub Actions workflow + final migration verification
 
 ### Phase 5: Future Client Stubs
 **Goal**: Core package defines extensible protocol interfaces for Azure DevOps and AI providers that future deliverables can implement
@@ -103,6 +105,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Monorepo Scaffolding | 1/1 | Complete   | 2026-03-25 |
 | 2. Core Foundations | 2/2 | Complete   | 2026-03-25 |
-| 3. Core API Infrastructure | 0/1 | Not started | - |
-| 4. Submodule-Status Migration | 0/? | Not started | - |
+| 3. Core API Infrastructure | 1/1 | Complete   | 2026-03-25 |
+| 4. Submodule-Status Migration | 0/3 | Not started | - |
 | 5. Future Client Stubs | 0/? | Not started | - |
