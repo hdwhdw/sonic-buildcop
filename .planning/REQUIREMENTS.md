@@ -38,8 +38,8 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 
 ### Migration
 
-- [ ] **MIG-01**: Submodule-status collector, staleness, and enrichment modules import from core
-- [ ] **MIG-02**: All existing tests pass with adapted imports (same assertions, new import paths)
+- [x] **MIG-01**: Submodule-status collector, staleness, and enrichment modules import from core
+- [x] **MIG-02**: All existing tests pass with adapted imports (same assertions, new import paths)
 - [ ] **MIG-03**: GitHub Actions workflow updated for new directory structure (uv-based)
 - [ ] **MIG-04**: Dashboard output identical to pre-migration
 
@@ -102,8 +102,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-03 | Phase 3: Core API Infrastructure | Complete |
 | API-04 | Phase 3: Core API Infrastructure | Complete |
 | MDL-01 | Phase 2: Core Foundations | Complete |
-| MIG-01 | Phase 4: Submodule-Status Migration | Pending |
-| MIG-02 | Phase 4: Submodule-Status Migration | Pending |
+| MIG-01 | Phase 4: Submodule-Status Migration | Complete |
+| MIG-02 | Phase 4: Submodule-Status Migration | Complete |
 | MIG-03 | Phase 4: Submodule-Status Migration | Pending |
 | MIG-04 | Phase 4: Submodule-Status Migration | Pending |
 | STB-01 | Phase 5: Future Client Stubs | Pending |
