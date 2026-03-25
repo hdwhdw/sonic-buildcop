@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-25)
 ## Current Position
 
 Phase: 04 (submodule-status-migration) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Plan: 2 of 3
 | Phase 02 P02 | 3min | 2 tasks | 7 files |
 | Phase 03 P01 | 3min | 2 tasks | 5 files |
 | Phase 04 P01 | 4min | 2 tasks | 2 files |
+| Phase 04 P02 | 5min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,9 @@ Recent decisions affecting current work:
 - [Phase 03]: ParamSpec/TypeVar used in retry() for full type signature preservation
 - [Phase 04]: Kept import requests alongside buildcop_common imports — still needed for Session type hints and RequestException
 - [Phase 04]: FALLBACK_THRESHOLDS uses imported MAX_YELLOW_DAYS/MAX_RED_DAYS instead of hardcoded 30/60
+- [Phase 04]: Split collect_submodule into _collect_submodule_data (@retry) + collect_submodule (error handler)
+- [Phase 04]: @retry(max_retries=2) gives 3 total attempts matching original manual loop
+- [Phase 04]: Test sleep patches point to buildcop_common.github.time.sleep not module-local
 
 ### Pending Todos
 
@@ -94,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T18:42:41.820Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-25T18:41:56Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None

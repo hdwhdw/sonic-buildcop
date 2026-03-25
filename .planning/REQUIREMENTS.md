@@ -12,7 +12,7 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 - [x] **PKG-01**: Monorepo uses uv workspaces with root `pyproject.toml` and per-package `pyproject.toml` files
 - [x] **PKG-02**: Core package (`sonic-buildcop-core`) installable with `uv pip install -e ./core`
 - [x] **PKG-03**: Submodule-status package depends on core, uses src-layout
-- [ ] **PKG-04**: All `sys.path.insert` hacks removed — proper package imports throughout
+- [x] **PKG-04**: All `sys.path.insert` hacks removed — proper package imports throughout
 
 ### Configuration
 
@@ -91,7 +91,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PKG-01 | Phase 1: Monorepo Scaffolding | Complete |
 | PKG-02 | Phase 1: Monorepo Scaffolding | Complete |
 | PKG-03 | Phase 1: Monorepo Scaffolding | Complete |
-| PKG-04 | Phase 4: Submodule-Status Migration | Pending |
+| PKG-04 | Phase 4: Submodule-Status Migration | Complete |
 | CFG-01 | Phase 2: Core Foundations | Complete |
 | CFG-02 | Phase 2: Core Foundations | Complete |
 | CFG-03 | Phase 2: Core Foundations | Complete |
