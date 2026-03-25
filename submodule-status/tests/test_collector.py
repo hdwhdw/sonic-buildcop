@@ -120,22 +120,20 @@ def test_get_default_branch(mock_repo_response):
 # ---------------------------------------------------------------------------
 
 
-def test_get_staleness_when_behind(mock_compare_response, mock_head_commit_response):
-    """get_staleness should return commits_behind=5 and days_behind=36.0."""
+def test_get_staleness_when_behind(mock_compare_response):
+    """get_staleness should return commits_behind=5 and days_behind based on now - first_ahead_date."""
     session = MagicMock(spec=requests.Session)
 
-    # First call → compare response, second call → HEAD commit response
     resp_compare = MagicMock()
     resp_compare.json.return_value = mock_compare_response
 
-    resp_head = MagicMock()
-    resp_head.json.return_value = mock_head_commit_response
-
-    session.get.side_effect = [resp_compare, resp_head]
+    session.get.side_effect = [resp_compare]
 
     result = get_staleness(session, "sonic-net", "sonic-swss", "abc123", "master")
     assert result["commits_behind"] == 5
-    assert result["days_behind"] == 36.0  # Feb 20 - Jan 15 = 36 days
+    # days_behind = now - first_ahead_commit_date (2025-01-20)
+    # Should be a large positive number (over a year from now)
+    assert result["days_behind"] > 0
 
 
 def test_get_staleness_when_identical(mock_compare_response_identical):
@@ -148,6 +146,30 @@ def test_get_staleness_when_identical(mock_compare_response_identical):
     result = get_staleness(session, "sonic-net", "sonic-swss", "abc123", "master")
     assert result["commits_behind"] == 0
     assert result["days_behind"] == 0
+
+
+@patch("collector.datetime")
+def test_get_staleness_uses_now_minus_first_ahead(mock_dt):
+    """days_behind should be now - first_ahead_commit_date, not head - pinned."""
+    from datetime import datetime, timezone
+
+    fake_now = datetime(2025, 1, 25, 10, 0, 0, tzinfo=timezone.utc)
+    mock_dt.now.return_value = fake_now
+    mock_dt.fromisoformat = datetime.fromisoformat
+
+    session = MagicMock(spec=requests.Session)
+    resp = MagicMock()
+    resp.json.return_value = {
+        "ahead_by": 1,
+        "commits": [
+            {"commit": {"committer": {"date": "2025-01-24T10:00:00Z"}}},
+        ],
+    }
+    session.get.return_value = resp
+
+    result = get_staleness(session, "sonic-net", "sonic-swss", "abc123", "master")
+    assert result["commits_behind"] == 1
+    assert result["days_behind"] == 1.0  # 1 day since first ahead commit
 
 
 # ---------------------------------------------------------------------------
@@ -191,15 +213,12 @@ def test_collect_submodule_success(mock_sleep):
         "base_commit": {
             "commit": {"committer": {"date": "2025-01-15T10:00:00Z"}}
         },
+        "commits": [
+            {"commit": {"committer": {"date": "2025-01-20T10:00:00Z"}}},
+        ],
     }
 
-    # HEAD commit response
-    resp_head = MagicMock()
-    resp_head.json.return_value = {
-        "commit": {"committer": {"date": "2025-02-20T10:00:00Z"}}
-    }
-
-    session.get.side_effect = [resp_sha, resp_branch, resp_compare, resp_head]
+    session.get.side_effect = [resp_sha, resp_branch, resp_compare]
 
     submodule = {
         "name": "sonic-swss",
@@ -215,7 +234,7 @@ def test_collect_submodule_success(mock_sleep):
     assert result["pinned_sha"] == "abc123def4567890abc123def4567890abc123de"
     assert result["branch"] == "master"
     assert result["commits_behind"] == 5
-    assert result["days_behind"] == 36.0
+    assert result["days_behind"] > 0  # now - 2025-01-20
     assert result["compare_url"] == "https://github.com/sonic-net/sonic-swss/compare/abc123def4567890abc123def4567890abc123de...master"
     assert result["error"] is None
 

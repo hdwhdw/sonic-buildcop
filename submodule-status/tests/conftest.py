@@ -95,6 +95,15 @@ def mock_compare_response():
                 }
             }
         },
+        "commits": [
+            {
+                "commit": {
+                    "committer": {
+                        "date": "2025-01-20T10:00:00Z"
+                    }
+                }
+            },
+        ],
     }
 
 

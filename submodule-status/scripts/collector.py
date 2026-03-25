@@ -115,7 +115,8 @@ def get_staleness(
     """Get commits-behind and days-behind for a submodule.
 
     Uses the Compare API's ``ahead_by`` field for commit count, and computes
-    days as ``date(HEAD on branch) - date(pinned commit)``.
+    days as ``now - date(first commit after pinned)`` to measure real staleness
+    time (how long the pointer has been behind).
     """
     compare_url = f"{API_BASE}/repos/{owner}/{repo}/compare/{pinned_sha}...{branch}"
     resp = session.get(compare_url)
@@ -127,18 +128,25 @@ def get_staleness(
     if commits_behind == 0:
         return {"commits_behind": 0, "days_behind": 0}
 
-    # Get pinned commit date from base_commit
-    pinned_date_str = data["base_commit"]["commit"]["committer"]["date"]
-    pinned_date = datetime.fromisoformat(pinned_date_str.replace("Z", "+00:00"))
+    # Find the oldest commit after pinned (first in the ahead list)
+    commits_ahead = data.get("commits", [])
+    if commits_ahead:
+        first_ahead_date_str = commits_ahead[0]["commit"]["committer"]["date"]
+        first_ahead_date = datetime.fromisoformat(
+            first_ahead_date_str.replace("Z", "+00:00")
+        )
+    else:
+        # Fallback: use HEAD commit date if commits list is empty
+        head_url = f"{API_BASE}/repos/{owner}/{repo}/commits/{branch}"
+        head_resp = session.get(head_url)
+        head_resp.raise_for_status()
+        first_ahead_date_str = head_resp.json()["commit"]["committer"]["date"]
+        first_ahead_date = datetime.fromisoformat(
+            first_ahead_date_str.replace("Z", "+00:00")
+        )
 
-    # Get HEAD commit date on the branch
-    head_url = f"{API_BASE}/repos/{owner}/{repo}/commits/{branch}"
-    head_resp = session.get(head_url)
-    head_resp.raise_for_status()
-    head_date_str = head_resp.json()["commit"]["committer"]["date"]
-    head_date = datetime.fromisoformat(head_date_str.replace("Z", "+00:00"))
-
-    days_behind = round((head_date - pinned_date).total_seconds() / 86400, 1)
+    now = datetime.now(timezone.utc)
+    days_behind = round((now - first_ahead_date).total_seconds() / 86400, 1)
 
     return {"commits_behind": commits_behind, "days_behind": max(0, days_behind)}
 
