@@ -88,32 +88,32 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PKG-01 | — | Pending |
-| PKG-02 | — | Pending |
-| PKG-03 | — | Pending |
-| PKG-04 | — | Pending |
-| CFG-01 | — | Pending |
-| CFG-02 | — | Pending |
-| CFG-03 | — | Pending |
-| LOG-01 | — | Pending |
-| LOG-02 | — | Pending |
-| API-01 | — | Pending |
-| API-02 | — | Pending |
-| API-03 | — | Pending |
-| API-04 | — | Pending |
-| MDL-01 | — | Pending |
-| MIG-01 | — | Pending |
-| MIG-02 | — | Pending |
-| MIG-03 | — | Pending |
-| MIG-04 | — | Pending |
-| STB-01 | — | Pending |
-| STB-02 | — | Pending |
+| PKG-01 | Phase 1: Monorepo Scaffolding | Pending |
+| PKG-02 | Phase 1: Monorepo Scaffolding | Pending |
+| PKG-03 | Phase 1: Monorepo Scaffolding | Pending |
+| PKG-04 | Phase 4: Submodule-Status Migration | Pending |
+| CFG-01 | Phase 2: Core Foundations | Pending |
+| CFG-02 | Phase 2: Core Foundations | Pending |
+| CFG-03 | Phase 2: Core Foundations | Pending |
+| LOG-01 | Phase 2: Core Foundations | Pending |
+| LOG-02 | Phase 2: Core Foundations | Pending |
+| API-01 | Phase 3: Core API Infrastructure | Pending |
+| API-02 | Phase 3: Core API Infrastructure | Pending |
+| API-03 | Phase 3: Core API Infrastructure | Pending |
+| API-04 | Phase 3: Core API Infrastructure | Pending |
+| MDL-01 | Phase 2: Core Foundations | Pending |
+| MIG-01 | Phase 4: Submodule-Status Migration | Pending |
+| MIG-02 | Phase 4: Submodule-Status Migration | Pending |
+| MIG-03 | Phase 4: Submodule-Status Migration | Pending |
+| MIG-04 | Phase 4: Submodule-Status Migration | Pending |
+| STB-01 | Phase 5: Future Client Stubs | Pending |
+| STB-02 | Phase 5: Future Client Stubs | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total
-- Mapped to phases: 0
-- Unmapped: 20 ⚠️
+- Mapped to phases: 20 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-25*
-*Last updated: 2026-03-25 after initial definition*
+*Last updated: 2026-03-25 after roadmap creation*
