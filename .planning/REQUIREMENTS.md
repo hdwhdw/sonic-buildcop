@@ -27,10 +27,10 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 
 ### API Infrastructure
 
-- [ ] **API-01**: GitHub auth & session factory with token validation and proper error on missing token
-- [ ] **API-02**: Reusable retry decorator with exponential backoff (extracted from `collect_submodule`)
-- [ ] **API-03**: Rate-limit-aware request handling — read `X-RateLimit-*` headers, handle 403/429 specifically
-- [ ] **API-04**: Custom exception types: `APIError`, `RateLimitError`, `AuthenticationError`
+- [x] **API-01**: GitHub auth & session factory with token validation and proper error on missing token
+- [x] **API-02**: Reusable retry decorator with exponential backoff (extracted from `collect_submodule`)
+- [x] **API-03**: Rate-limit-aware request handling — read `X-RateLimit-*` headers, handle 403/429 specifically
+- [x] **API-04**: Custom exception types: `APIError`, `RateLimitError`, `AuthenticationError`
 
 ### Data Models
 
@@ -97,10 +97,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CFG-03 | Phase 2: Core Foundations | Complete |
 | LOG-01 | Phase 2: Core Foundations | Complete |
 | LOG-02 | Phase 2: Core Foundations | Complete |
-| API-01 | Phase 3: Core API Infrastructure | Pending |
-| API-02 | Phase 3: Core API Infrastructure | Pending |
-| API-03 | Phase 3: Core API Infrastructure | Pending |
-| API-04 | Phase 3: Core API Infrastructure | Pending |
+| API-01 | Phase 3: Core API Infrastructure | Complete |
+| API-02 | Phase 3: Core API Infrastructure | Complete |
+| API-03 | Phase 3: Core API Infrastructure | Complete |
+| API-04 | Phase 3: Core API Infrastructure | Complete |
 | MDL-01 | Phase 2: Core Foundations | Complete |
 | MIG-01 | Phase 4: Submodule-Status Migration | Pending |
 | MIG-02 | Phase 4: Submodule-Status Migration | Pending |
