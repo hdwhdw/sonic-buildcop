@@ -239,7 +239,7 @@ def test_collect_submodule_success(mock_sleep):
     assert result["error"] is None
 
 
-@patch("submodule_status.collector.time.sleep")
+@patch("buildcop_common.github.time.sleep")
 def test_collect_submodule_retries_on_failure(mock_sleep):
     """collect_submodule should retry on failure and succeed on the 3rd try."""
     session = MagicMock(spec=requests.Session)
@@ -263,8 +263,8 @@ def test_collect_submodule_retries_on_failure(mock_sleep):
     }
 
     session.get.side_effect = [
-        requests.RequestException("timeout"),
-        requests.RequestException("timeout"),
+        requests.ConnectionError("timeout"),
+        requests.ConnectionError("timeout"),
         resp_sha,
         resp_branch,
         resp_compare,
@@ -284,11 +284,11 @@ def test_collect_submodule_retries_on_failure(mock_sleep):
     assert session.get.call_count >= 3
 
 
-@patch("submodule_status.collector.time.sleep")
+@patch("buildcop_common.github.time.sleep")
 def test_collect_submodule_unavailable_after_retries(mock_sleep):
     """collect_submodule should return status=unavailable after exhausting retries."""
     session = MagicMock(spec=requests.Session)
-    session.get.side_effect = requests.RequestException("API down")
+    session.get.side_effect = requests.ConnectionError("API down")
 
     submodule = {
         "name": "sonic-swss",
