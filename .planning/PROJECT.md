@@ -17,12 +17,12 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 - ✓ Static HTML dashboard rendering via Jinja2 — existing
 - ✓ GitHub Actions scheduled pipeline with GitHub Pages deployment — existing
 - ✓ Retry with backoff and graceful degradation on API errors — existing
+- ✓ Proper Python packaging with pyproject.toml — core as installable package, deliverables depend on it — Phase 1
+- ✓ Monorepo directory structure: core/ package + deliverable dirs (submodule-status/, future tools) — Phase 1
 
 ### Active
 
 - [ ] Shared core Python package with GitHub client (PyGithub), Azure DevOps client (azure-devops-python-api), and AI provider client stubs
-- [ ] Proper Python packaging with pyproject.toml — core as installable package, deliverables depend on it
-- [ ] Monorepo directory structure: core/ package + deliverable dirs (submodule-status/, future tools)
 - [ ] Migrate existing submodule-status from raw requests to shared core GitHub client
 - [ ] Shared reusable patterns extracted from current code (auth, rate limiting, config, logging)
 - [ ] Existing tests pass after migration — submodule-status produces same output
@@ -36,7 +36,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ## Context
 
-**Current state:** Single-purpose repo with a submodule-staleness pipeline under `submodule-status/`. All GitHub API interaction is via raw `requests.Session` with inline auth headers. No Python packaging — scripts use `sys.path` hacks for imports. Constants duplicated across 3 modules. No logging framework.
+**Current state:** Monorepo with uv workspace — `core/` package (sonic-buildcop-core v0.1.0, skeleton) and `submodule-status/` deliverable with proper src-layout. All existing code migrated to package imports. 122 tests passing. No `sys.path` hacks remain.
 
 **Tech debt addressed by this refactoring:**
 - Duplicated constants (API_BASE, PARENT_OWNER/REPO_OWNER across 3 files)
@@ -62,10 +62,11 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Monorepo with shared core package | Multiple deliverables need same API clients; avoids duplication | — Pending |
+| Monorepo with shared core package | Multiple deliverables need same API clients; avoids duplication | ✓ Good |
 | PyGithub over raw requests | Typed, maintained, handles pagination/rate-limits natively | — Pending |
 | azure-devops-python-api for Azure | Official Microsoft client, matches PyGithub pattern | — Pending |
-| pyproject.toml packaging | Modern Python standard, fixes sys.path hacks, enables editable installs | — Pending |
+| pyproject.toml packaging | Modern Python standard, fixes sys.path hacks, enables editable installs | ✓ Good |
+| uv workspaces + hatchling | Modern Python tooling, single lockfile, src-layout | ✓ Good |
 
 ---
-*Last updated: 2026-03-25 after initialization*
+*Last updated: 2026-03-25 after Phase 1 completion*
