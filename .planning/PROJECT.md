@@ -19,12 +19,14 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 - ✓ Retry with backoff and graceful degradation on API errors — existing
 - ✓ Proper Python packaging with pyproject.toml — libs/apps grouping, flat layout, buildcop_common + buildcop_github + submodule_status — Phase 1
 - ✓ Monorepo directory structure: libs/ (buildcop-common, buildcop-github) + apps/ (submodule-status) — Phase 1
+- ✓ Centralized config with 11 constants, typed env var helper, and HTTP timeout defaults — Phase 2
+- ✓ Structured logging via stdlib logging replacing bare print() — Phase 2
+- ✓ Typed data models (6 TypedDicts) for pipeline data shapes — Phase 2
 
 ### Active
 
 - [ ] Shared core Python package with GitHub client (PyGithub), Azure DevOps client (azure-devops-python-api), and AI provider client stubs
 - [ ] Migrate existing submodule-status from raw requests to shared core GitHub client
-- [ ] Shared reusable patterns extracted from current code (auth, rate limiting, config, logging)
 - [ ] Existing tests pass after migration — submodule-status produces same output
 
 ### Out of Scope
@@ -36,7 +38,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ## Context
 
-**Current state:** Monorepo with uv workspace using libs/apps grouping — `libs/buildcop-common/` and `libs/buildcop-github/` (skeletons), `apps/submodule-status/` deliverable with flat layout. All existing code migrated to package imports (`submodule_status.*`). 122 tests passing. No `sys.path` hacks remain.
+**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config (11 constants + typed env var helper), 6 TypedDicts for pipeline data, structured logging (`setup_logging()`), and timeout-aware HTTP sessions (`create_session()`). 145 tests passing (122 existing + 23 core). Phase 2 complete — ready for API infrastructure (Phase 3).
 
 **Tech debt addressed by this refactoring:**
 - Duplicated constants (API_BASE, PARENT_OWNER/REPO_OWNER across 3 files)
@@ -69,4 +71,4 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 | uv workspaces + hatchling | Modern Python tooling, single lockfile, src-layout | ✓ Good |
 
 ---
-*Last updated: 2026-03-25 after Phase 1 completion*
+*Last updated: 2026-03-25 after Phase 2 completion*
