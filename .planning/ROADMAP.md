@@ -60,10 +60,10 @@ Plans:
   2. API calls automatically retry with exponential backoff on transient failures (5xx, network errors)
   3. Rate-limited responses (403/429) are detected via `X-RateLimit-*` headers and handled with `RateLimitError`
   4. All API failures raise typed exceptions (`APIError`, `RateLimitError`, `AuthenticationError`) — no generic `Exception` or raw status codes
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md — Typed exception hierarchy + GitHub session factory, check_response, retry decorator, __init__.py re-exports
 
 ### Phase 4: Submodule-Status Migration
 **Goal**: Existing submodule-status tool runs entirely on core package infrastructure with identical output and zero legacy hacks
@@ -103,6 +103,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Monorepo Scaffolding | 1/1 | Complete   | 2026-03-25 |
 | 2. Core Foundations | 2/2 | Complete   | 2026-03-25 |
-| 3. Core API Infrastructure | 0/? | Not started | - |
+| 3. Core API Infrastructure | 0/1 | Not started | - |
 | 4. Submodule-Status Migration | 0/? | Not started | - |
 | 5. Future Client Stubs | 0/? | Not started | - |
