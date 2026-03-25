@@ -14,18 +14,20 @@ Exports:
     compute_avg_delay               — compute mean delay for all submodules in-place
     enrich_with_details             — main entry point calling all enrichment functions
 """
+import logging
 import statistics
 import time
 from datetime import datetime, timezone
 
 import requests
 
+from buildcop_common.config import API_BASE, BOT_AUTHOR, PARENT_OWNER, PARENT_REPO
+from buildcop_common.exceptions import APIError
+from buildcop_common.github import check_response
+
 # --- Constants ---
 
-PARENT_OWNER = "sonic-net"
-PARENT_REPO = "sonic-buildimage"
-API_BASE = "https://api.github.com"
-BOT_AUTHOR = "mssonicbld"
+logger = logging.getLogger(__name__)
 
 
 # --- Functions ---
@@ -62,7 +64,7 @@ def get_ci_status_for_pr(session: requests.Session, pr_number: int) -> str | Non
         # Get head SHA from the PR
         pr_url = f"{API_BASE}/repos/{PARENT_OWNER}/{PARENT_REPO}/pulls/{pr_number}"
         pr_resp = session.get(pr_url)
-        pr_resp.raise_for_status()
+        check_response(pr_resp)
         head_sha = pr_resp.json()["head"]["sha"]
 
         # Get check runs for the head SHA
@@ -74,7 +76,7 @@ def get_ci_status_for_pr(session: requests.Session, pr_number: int) -> str | Non
             checks_url,
             headers={"Accept": "application/vnd.github+json"},
         )
-        checks_resp.raise_for_status()
+        check_response(checks_resp)
         data = checks_resp.json()
 
         check_runs = data.get("check_runs", [])
@@ -98,7 +100,8 @@ def get_ci_status_for_pr(session: requests.Session, pr_number: int) -> str | Non
             return "pending"
         return "pass"
 
-    except (requests.RequestException, KeyError):
+    except (APIError, requests.RequestException, KeyError):
+        logger.warning("Failed to get CI status for PR #%d", pr_number, exc_info=True)
         return None
 
 
@@ -139,9 +142,10 @@ def fetch_open_bot_prs(
             f"{API_BASE}/search/issues",
             params={"q": query, "per_page": 50, "sort": "updated", "order": "desc"},
         )
-        resp.raise_for_status()
+        check_response(resp)
         items = resp.json().get("items", [])
-    except (requests.RequestException, KeyError):
+    except (APIError, requests.RequestException, KeyError):
+        logger.warning("Failed to fetch open bot PRs", exc_info=True)
         return  # All already None
 
     now = datetime.now(timezone.utc)
@@ -204,9 +208,10 @@ def fetch_merged_bot_prs(
             f"{API_BASE}/search/issues",
             params={"q": query, "per_page": 100, "sort": "updated", "order": "desc"},
         )
-        resp.raise_for_status()
+        check_response(resp)
         items = resp.json().get("items", [])
-    except (requests.RequestException, KeyError):
+    except (APIError, requests.RequestException, KeyError):
+        logger.warning("Failed to fetch merged bot PRs", exc_info=True)
         return  # All already None
 
     matched_set: set[str] = set()
@@ -245,14 +250,15 @@ def fetch_latest_repo_commits(
                 f"/commits/{sub['branch']}"
             )
             resp = session.get(url)
-            resp.raise_for_status()
+            check_response(resp)
             data = resp.json()
 
             sub["latest_repo_commit"] = {
                 "url": data["html_url"],
                 "date": data["commit"]["committer"]["date"],
             }
-        except (requests.RequestException, KeyError, ValueError):
+        except (APIError, requests.RequestException, KeyError, ValueError):
+            logger.warning("Failed to fetch latest commit for %s", sub["name"], exc_info=True)
             sub["latest_repo_commit"] = None
 
         time.sleep(0.5)
@@ -279,9 +285,10 @@ def compute_avg_delay_for_submodule(
     params = {"path": submodule_path, "per_page": num_bumps}
     try:
         resp = session.get(url, params=params)
-        resp.raise_for_status()
+        check_response(resp)
         bumps = resp.json()
-    except (requests.RequestException, KeyError, ValueError):
+    except (APIError, requests.RequestException, KeyError, ValueError):
+        logger.warning("Failed to fetch bump history for %s", submodule_path, exc_info=True)
         return None
 
     if not isinstance(bumps, list) or len(bumps) < 2:
@@ -302,7 +309,7 @@ def compute_avg_delay_for_submodule(
                 f"/contents/{submodule_path}"
             )
             contents_resp = session.get(contents_url, params={"ref": bump_sha})
-            contents_resp.raise_for_status()
+            check_response(contents_resp)
             sub_sha = contents_resp.json()["sha"]
 
             # Step 3: Get submodule commit date
@@ -310,7 +317,7 @@ def compute_avg_delay_for_submodule(
                 f"{API_BASE}/repos/{sub_owner}/{sub_repo}/commits/{sub_sha}"
             )
             commit_resp = session.get(commit_url)
-            commit_resp.raise_for_status()
+            check_response(commit_resp)
             commit_date_str = commit_resp.json()["commit"]["committer"]["date"]
             commit_date = datetime.fromisoformat(
                 commit_date_str.replace("Z", "+00:00")
@@ -321,7 +328,8 @@ def compute_avg_delay_for_submodule(
             if delay_days >= 0:
                 delays.append(delay_days)
 
-        except (requests.RequestException, KeyError, ValueError):
+        except (APIError, requests.RequestException, KeyError, ValueError):
+            logger.warning("Skipping bump for %s/%s", sub_owner, sub_repo, exc_info=True)
             continue  # Skip this bump, try next
 
         time.sleep(0.5)
@@ -354,7 +362,8 @@ def compute_avg_delay(
                 sub["owner"],
                 sub["repo"],
             )
-        except (requests.RequestException, KeyError, ValueError):
+        except (APIError, requests.RequestException, KeyError, ValueError):
+            logger.warning("Failed to compute avg delay for %s", sub["name"], exc_info=True)
             sub["avg_delay_days"] = None
 
         time.sleep(0.5)
