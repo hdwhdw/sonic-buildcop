@@ -12,7 +12,7 @@ Transform a single-purpose submodule-staleness repo into a monorepo with a share
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Monorepo Scaffolding** - uv workspace with core and submodule-status packages
+- [x] **Phase 1: Monorepo Scaffolding** - uv workspace with core and submodule-status packages
 - [ ] **Phase 2: Core Foundations** - Config, data models, and structured logging in core package
 - [ ] **Phase 3: Core API Infrastructure** - GitHub auth, retry, rate-limiting, and typed exceptions
 - [ ] **Phase 4: Submodule-Status Migration** - Migrate existing tool to core, verify identical output
@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Workspace infrastructure + atomic source/test migration to src-layout
+- [x] 01-01-PLAN.md — Workspace infrastructure + atomic source/test migration to src-layout
 
 ### Phase 2: Core Foundations
 **Goal**: Core package provides centralized configuration, typed data models, and structured logging that any deliverable can import
@@ -99,7 +99,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Monorepo Scaffolding | 0/? | Not started | - |
+| 1. Monorepo Scaffolding | 1/1 | Complete | 2026-03-25 |
 | 2. Core Foundations | 0/? | Not started | - |
 | 3. Core API Infrastructure | 0/? | Not started | - |
 | 4. Submodule-Status Migration | 0/? | Not started | - |
