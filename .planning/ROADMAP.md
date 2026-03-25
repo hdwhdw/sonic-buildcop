@@ -13,7 +13,7 @@ Transform a single-purpose submodule-staleness repo into a monorepo with a share
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Monorepo Scaffolding** - uv workspace with libs/apps flat layout (RE-PLAN) (completed 2026-03-25)
-- [ ] **Phase 2: Core Foundations** - Config, data models, and structured logging in core package
+- [x] **Phase 2: Core Foundations** - Config, data models, and structured logging in core package (completed 2026-03-25)
 - [ ] **Phase 3: Core API Infrastructure** - GitHub auth, retry, rate-limiting, and typed exceptions
 - [ ] **Phase 4: Submodule-Status Migration** - Migrate existing tool to core, verify identical output
 - [ ] **Phase 5: Future Client Stubs** - Azure DevOps and AI provider protocol interfaces
@@ -45,7 +45,7 @@ Plans:
   3. HTTP sessions created through core have timeout defaults applied (30s connect, 60s read)
   4. Core modules use structured `logging` with caught exceptions logged at WARNING — no bare `print()` or silent `None` returns in core
   5. Typed dataclasses (`SubmoduleInfo`, `StalenessResult`, `PRInfo`) are importable from core and pass type-checker validation
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Config & data models (constants, env var helper, TypedDicts)
@@ -102,7 +102,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Monorepo Scaffolding | 1/1 | Complete   | 2026-03-25 |
-| 2. Core Foundations | 1/2 | In Progress|  |
+| 2. Core Foundations | 2/2 | Complete   | 2026-03-25 |
 | 3. Core API Infrastructure | 0/? | Not started | - |
 | 4. Submodule-Status Migration | 0/? | Not started | - |
 | 5. Future Client Stubs | 0/? | Not started | - |

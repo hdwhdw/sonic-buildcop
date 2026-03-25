@@ -18,12 +18,12 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 
 - [x] **CFG-01**: Centralized constants module (`API_BASE`, `PARENT_OWNER`, `PARENT_REPO`) — single source of truth
 - [x] **CFG-02**: Env-var-based config helper with typed defaults (`core.config.get()`)
-- [ ] **CFG-03**: Request timeout defaults on all HTTP sessions (30s connect, 60s read)
+- [x] **CFG-03**: Request timeout defaults on all HTTP sessions (30s connect, 60s read)
 
 ### Logging
 
-- [ ] **LOG-01**: Structured logging via Python `logging` stdlib replacing all bare `print()` statements
-- [ ] **LOG-02**: Caught exceptions logged at WARNING level (no more silent `None` returns)
+- [x] **LOG-01**: Structured logging via Python `logging` stdlib replacing all bare `print()` statements
+- [x] **LOG-02**: Caught exceptions logged at WARNING level (no more silent `None` returns)
 
 ### API Infrastructure
 
@@ -94,9 +94,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PKG-04 | Phase 4: Submodule-Status Migration | Pending |
 | CFG-01 | Phase 2: Core Foundations | Complete |
 | CFG-02 | Phase 2: Core Foundations | Complete |
-| CFG-03 | Phase 2: Core Foundations | Pending |
-| LOG-01 | Phase 2: Core Foundations | Pending |
-| LOG-02 | Phase 2: Core Foundations | Pending |
+| CFG-03 | Phase 2: Core Foundations | Complete |
+| LOG-01 | Phase 2: Core Foundations | Complete |
+| LOG-02 | Phase 2: Core Foundations | Complete |
 | API-01 | Phase 3: Core API Infrastructure | Pending |
 | API-02 | Phase 3: Core API Infrastructure | Pending |
 | API-03 | Phase 3: Core API Infrastructure | Pending |
