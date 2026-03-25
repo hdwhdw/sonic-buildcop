@@ -14,7 +14,7 @@
 
 sonic-buildimage uses dozens of Git submodules. A bot ([mssonicbld](https://github.com/mssonicbld)) submits PRs to keep pointers current, but they still fall behind — sometimes by weeks.
 
-This tool queries the GitHub API every 4 hours, classifies each submodule as 🟢 fresh / 🟡 drifting / 🔴 stale based on its own commit cadence, and publishes a dashboard to GitHub Pages.
+This tool monitors submodule staleness and publishes a dashboard to GitHub Pages.
 
 👉 **[View the live dashboard](https://hdwhdw.github.io/sonic-buildcop/)**
 
