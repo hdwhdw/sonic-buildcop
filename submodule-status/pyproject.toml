@@ -1,0 +1,21 @@
+[project]
+name = "sonic-submodule-status"
+version = "0.1.0"
+description = "Submodule staleness monitoring dashboard for SONiC"
+requires-python = ">=3.12"
+dependencies = [
+    "sonic-buildcop-core",
+    "jinja2>=3.1",
+    "requests>=2.31",
+]
+
+[project.scripts]
+collect-submodules = "sonic_submodule_status.collector:main"
+render-dashboard = "sonic_submodule_status.renderer:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+sonic-buildcop-core = { workspace = true }

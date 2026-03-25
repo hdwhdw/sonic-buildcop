@@ -1,0 +1,25 @@
+[project]
+name = "sonic-buildcop"
+version = "0.1.0"
+description = "SONiC build infrastructure tools"
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = [
+    "core",
+    "submodule-status",
+]
+
+[dependency-groups]
+dev = [
+    "sonic-buildcop-core",
+    "sonic-submodule-status",
+    "pytest>=8.0",
+]
+
+[tool.uv.sources]
+sonic-buildcop-core = { workspace = true }
+sonic-submodule-status = { workspace = true }
+
+[tool.pytest.ini_options]
+testpaths = ["submodule-status/tests"]

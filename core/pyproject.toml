@@ -1,0 +1,10 @@
+[project]
+name = "sonic-buildcop-core"
+version = "0.1.0"
+description = "Shared core package for SONiC build infrastructure tools"
+requires-python = ">=3.12"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
