@@ -16,8 +16,8 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 
 ### Configuration
 
-- [ ] **CFG-01**: Centralized constants module (`API_BASE`, `PARENT_OWNER`, `PARENT_REPO`) — single source of truth
-- [ ] **CFG-02**: Env-var-based config helper with typed defaults (`core.config.get()`)
+- [x] **CFG-01**: Centralized constants module (`API_BASE`, `PARENT_OWNER`, `PARENT_REPO`) — single source of truth
+- [x] **CFG-02**: Env-var-based config helper with typed defaults (`core.config.get()`)
 - [ ] **CFG-03**: Request timeout defaults on all HTTP sessions (30s connect, 60s read)
 
 ### Logging
@@ -34,7 +34,7 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 
 ### Data Models
 
-- [ ] **MDL-01**: Typed dataclasses for cross-module types (`SubmoduleInfo`, `StalenessResult`, `PRInfo`)
+- [x] **MDL-01**: Typed dataclasses for cross-module types (`SubmoduleInfo`, `StalenessResult`, `PRInfo`)
 
 ### Migration
 
@@ -92,8 +92,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PKG-02 | Phase 1: Monorepo Scaffolding | Complete |
 | PKG-03 | Phase 1: Monorepo Scaffolding | Complete |
 | PKG-04 | Phase 4: Submodule-Status Migration | Pending |
-| CFG-01 | Phase 2: Core Foundations | Pending |
-| CFG-02 | Phase 2: Core Foundations | Pending |
+| CFG-01 | Phase 2: Core Foundations | Complete |
+| CFG-02 | Phase 2: Core Foundations | Complete |
 | CFG-03 | Phase 2: Core Foundations | Pending |
 | LOG-01 | Phase 2: Core Foundations | Pending |
 | LOG-02 | Phase 2: Core Foundations | Pending |
@@ -101,7 +101,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-02 | Phase 3: Core API Infrastructure | Pending |
 | API-03 | Phase 3: Core API Infrastructure | Pending |
 | API-04 | Phase 3: Core API Infrastructure | Pending |
-| MDL-01 | Phase 2: Core Foundations | Pending |
+| MDL-01 | Phase 2: Core Foundations | Complete |
 | MIG-01 | Phase 4: Submodule-Status Migration | Pending |
 | MIG-02 | Phase 4: Submodule-Status Migration | Pending |
 | MIG-03 | Phase 4: Submodule-Status Migration | Pending |

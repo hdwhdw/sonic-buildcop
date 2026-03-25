@@ -45,7 +45,7 @@ Plans:
   3. HTTP sessions created through core have timeout defaults applied (30s connect, 60s read)
   4. Core modules use structured `logging` with caught exceptions logged at WARNING — no bare `print()` or silent `None` returns in core
   5. Typed dataclasses (`SubmoduleInfo`, `StalenessResult`, `PRInfo`) are importable from core and pass type-checker validation
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 - [ ] 02-01-PLAN.md — Config & data models (constants, env var helper, TypedDicts)
@@ -102,7 +102,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Monorepo Scaffolding | 1/1 | Complete   | 2026-03-25 |
-| 2. Core Foundations | 0/? | Not started | - |
+| 2. Core Foundations | 1/2 | In Progress|  |
 | 3. Core API Infrastructure | 0/? | Not started | - |
 | 4. Submodule-Status Migration | 0/? | Not started | - |
 | 5. Future Client Stubs | 0/? | Not started | - |
