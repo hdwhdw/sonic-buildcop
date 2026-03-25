@@ -26,11 +26,13 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 - ✓ Retry decorator with exponential backoff on transient failures — Phase 3
 - ✓ Rate-limit detection (403/429 via X-RateLimit-* headers) with RateLimitError — Phase 3
 - ✓ Typed exception hierarchy (APIError → AuthenticationError, RateLimitError, TransientError) — Phase 3
+- ✓ Submodule-status migrated to core infrastructure (constants, check_response, @retry, session factory, setup_logging) — Phase 4
+- ✓ GitHub Actions CI workflow updated for uv-based monorepo with entry-point commands — Phase 4
+- ✓ Zero legacy patterns (no sys.path.insert, raise_for_status, bare print, os.environ.get) — Phase 4
 
 ### Active
 
-- [ ] Migrate existing submodule-status from raw requests to shared core GitHub client
-- [ ] Existing tests pass after migration — submodule-status produces same output
+- [ ] Protocol interfaces for future Azure DevOps and AI provider clients — Phase 5
 
 ### Out of Scope
 
@@ -41,7 +43,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ## Context
 
-**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config, 6 TypedDicts, structured logging, timeout-aware HTTP sessions, GitHub auth session factory, retry with exponential backoff, rate-limit detection, and typed exception hierarchy. 171 tests passing (122 existing + 49 core). Phase 3 complete — ready for submodule-status migration (Phase 4).
+**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config, 6 TypedDicts, structured logging, timeout-aware HTTP sessions, GitHub auth session factory, retry with exponential backoff, rate-limit detection, and typed exception hierarchy. Submodule-status fully migrated to core infrastructure — all 4 source modules import from `buildcop_common`, CI workflow uses `uv sync` + entry points. 171 tests passing (122 existing + 49 core). Phase 4 complete — ready for future client stubs (Phase 5).
 
 **Tech debt addressed by this refactoring:**
 - Duplicated constants (API_BASE, PARENT_OWNER/REPO_OWNER across 3 files)
@@ -74,4 +76,4 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 | uv workspaces + hatchling | Modern Python tooling, single lockfile, src-layout | ✓ Good |
 
 ---
-*Last updated: 2026-03-25 after Phase 3 completion*
+*Last updated: 2026-03-25 after Phase 4 completion*
