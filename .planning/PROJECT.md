@@ -22,10 +22,13 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 - ✓ Centralized config with 11 constants, typed env var helper, and HTTP timeout defaults — Phase 2
 - ✓ Structured logging via stdlib logging replacing bare print() — Phase 2
 - ✓ Typed data models (6 TypedDicts) for pipeline data shapes — Phase 2
+- ✓ GitHub auth session factory with token validation and AuthenticationError — Phase 3
+- ✓ Retry decorator with exponential backoff on transient failures — Phase 3
+- ✓ Rate-limit detection (403/429 via X-RateLimit-* headers) with RateLimitError — Phase 3
+- ✓ Typed exception hierarchy (APIError → AuthenticationError, RateLimitError, TransientError) — Phase 3
 
 ### Active
 
-- [ ] Shared core Python package with GitHub client (PyGithub), Azure DevOps client (azure-devops-python-api), and AI provider client stubs
 - [ ] Migrate existing submodule-status from raw requests to shared core GitHub client
 - [ ] Existing tests pass after migration — submodule-status produces same output
 
@@ -38,7 +41,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ## Context
 
-**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config (11 constants + typed env var helper), 6 TypedDicts for pipeline data, structured logging (`setup_logging()`), and timeout-aware HTTP sessions (`create_session()`). 145 tests passing (122 existing + 23 core). Phase 2 complete — ready for API infrastructure (Phase 3).
+**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config, 6 TypedDicts, structured logging, timeout-aware HTTP sessions, GitHub auth session factory, retry with exponential backoff, rate-limit detection, and typed exception hierarchy. 171 tests passing (122 existing + 49 core). Phase 3 complete — ready for submodule-status migration (Phase 4).
 
 **Tech debt addressed by this refactoring:**
 - Duplicated constants (API_BASE, PARENT_OWNER/REPO_OWNER across 3 files)
@@ -71,4 +74,4 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 | uv workspaces + hatchling | Modern Python tooling, single lockfile, src-layout | ✓ Good |
 
 ---
-*Last updated: 2026-03-25 after Phase 2 completion*
+*Last updated: 2026-03-25 after Phase 3 completion*
