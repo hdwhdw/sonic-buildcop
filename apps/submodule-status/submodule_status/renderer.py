@@ -74,7 +74,7 @@ def render_dashboard(data_path: str, site_dir: str) -> None:
         data = json.load(f)
 
     # Setup Jinja2 — templates/ is sibling of scripts/
-    template_dir = os.path.join(os.path.dirname(__file__), "..", "templates")
+    template_dir = os.path.join(os.path.dirname(__file__), "templates")
     env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template("dashboard.html")
 
