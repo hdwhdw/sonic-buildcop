@@ -45,8 +45,8 @@ Requirements for the monorepo refactoring. Each maps to roadmap phases.
 
 ### Future Client Stubs
 
-- [ ] **STB-01**: Azure DevOps client stub interface in core (protocol/ABC, no implementation)
-- [ ] **STB-02**: AI provider client stub interface in core (protocol/ABC, no implementation)
+- [~] **STB-01**: Azure DevOps client stub interface in core (protocol/ABC, no implementation) — DEFERRED (YAGNI)
+- [~] **STB-02**: AI provider client stub interface in core (protocol/ABC, no implementation) — DEFERRED (YAGNI)
 
 ## v2 Requirements
 
@@ -106,8 +106,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MIG-02 | Phase 4: Submodule-Status Migration | Complete |
 | MIG-03 | Phase 4: Submodule-Status Migration | Complete |
 | MIG-04 | Phase 4: Submodule-Status Migration | Complete |
-| STB-01 | Phase 5: Future Client Stubs | Pending |
-| STB-02 | Phase 5: Future Client Stubs | Pending |
+| STB-01 | Phase 5: Future Client Stubs | Deferred (YAGNI) |
+| STB-02 | Phase 5: Future Client Stubs | Deferred (YAGNI) |
 
 **Coverage:**
 - v1 requirements: 20 total

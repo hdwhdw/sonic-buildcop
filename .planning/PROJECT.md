@@ -32,7 +32,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ### Active
 
-- [ ] Protocol interfaces for future Azure DevOps and AI provider clients — Phase 5
+- (none — v1.0 milestone complete)
 
 ### Out of Scope
 
@@ -43,7 +43,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ## Context
 
-**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config, 6 TypedDicts, structured logging, timeout-aware HTTP sessions, GitHub auth session factory, retry with exponential backoff, rate-limit detection, and typed exception hierarchy. Submodule-status fully migrated to core infrastructure — all 4 source modules import from `buildcop_common`, CI workflow uses `uv sync` + entry points. 171 tests passing (122 existing + 49 core). Phase 4 complete — ready for future client stubs (Phase 5).
+**Current state:** Monorepo with uv workspace using libs/apps grouping. Core package (`buildcop-common`) provides centralized config, 6 TypedDicts, structured logging, timeout-aware HTTP sessions, GitHub auth session factory, retry with exponential backoff, rate-limit detection, and typed exception hierarchy. Submodule-status fully migrated to core infrastructure — all 4 source modules import from `buildcop_common`, CI workflow uses `uv sync` + entry points. 171 tests passing (122 existing + 49 core). v1.0 milestone complete (Phase 5 dropped — YAGNI).
 
 **Tech debt addressed by this refactoring:**
 - Duplicated constants (API_BASE, PARENT_OWNER/REPO_OWNER across 3 files)
@@ -76,4 +76,4 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 | uv workspaces + hatchling | Modern Python tooling, single lockfile, src-layout | ✓ Good |
 
 ---
-*Last updated: 2026-03-25 after Phase 4 completion*
+*Last updated: 2026-03-25 after v1.0 milestone completion*

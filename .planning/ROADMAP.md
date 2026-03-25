@@ -14,9 +14,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Monorepo Scaffolding** - uv workspace with libs/apps flat layout (RE-PLAN) (completed 2026-03-25)
 - [x] **Phase 2: Core Foundations** - Config, data models, and structured logging in core package (completed 2026-03-25)
-- [ ] **Phase 3: Core API Infrastructure** - GitHub auth, retry, rate-limiting, and typed exceptions
-- [ ] **Phase 4: Submodule-Status Migration** - Migrate existing tool to core, verify identical output
-- [ ] **Phase 5: Future Client Stubs** - Azure DevOps and AI provider protocol interfaces
+- [x] **Phase 3: Core API Infrastructure** - GitHub auth, retry, rate-limiting, and typed exceptions (completed 2026-03-25)
+- [x] **Phase 4: Submodule-Status Migration** - Migrate existing tool to core, verify identical output (completed 2026-03-25)
+- [~] **Phase 5: Future Client Stubs** - ~~Azure DevOps and AI provider protocol interfaces~~ (DROPPED — YAGNI; no concrete consumers exist yet)
 
 ## Phase Details
 
@@ -82,18 +82,9 @@ Plans:
 - [ ] 04-02-PLAN.md — Migrate collector.py + renderer.py to core (session factory, retry, env vars, logging)
 - [ ] 04-03-PLAN.md — Update GitHub Actions workflow + final migration verification
 
-### Phase 5: Future Client Stubs
-**Goal**: Core package defines extensible protocol interfaces for Azure DevOps and AI providers that future deliverables can implement
-**Depends on**: Phase 2
-**Requirements**: STB-01, STB-02
-**Success Criteria** (what must be TRUE):
-  1. An Azure DevOps client protocol/ABC exists in core with method signatures for pipeline interaction
-  2. An AI provider client protocol/ABC exists in core with method signatures for provider integration
-  3. Both stubs are importable and subclassable without requiring any external dependencies (azure-devops, etc.)
-**Plans**: TBD
-
-Plans:
-- [ ] 05-01: TBD
+### Phase 5: Future Client Stubs (DROPPED)
+**Status:** Dropped — YAGNI. No ADO or AI consumers exist in the codebase; designing protocol interfaces without concrete use cases leads to wrong abstractions. When a real ADO or AI tool is built, the correct interface will emerge from the concrete work.
+**Requirements**: STB-01, STB-02 (deferred to future milestone)
 
 ## Progress
 
@@ -106,5 +97,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 1. Monorepo Scaffolding | 1/1 | Complete   | 2026-03-25 |
 | 2. Core Foundations | 2/2 | Complete   | 2026-03-25 |
 | 3. Core API Infrastructure | 1/1 | Complete   | 2026-03-25 |
-| 4. Submodule-Status Migration | 0/3 | Not started | - |
-| 5. Future Client Stubs | 0/? | Not started | - |
+| 4. Submodule-Status Migration | 3/3 | Complete   | 2026-03-25 |
+| 5. Future Client Stubs | — | Dropped | — |
