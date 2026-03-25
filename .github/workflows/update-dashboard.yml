@@ -19,9 +19,6 @@ concurrency:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: submodule-status
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -29,21 +26,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: '3.12'
+          version: "latest"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: uv sync
 
       - name: Collect submodule data
-        run: python scripts/collector.py
+        run: uv run collect-submodules
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Render dashboard
-        run: python scripts/renderer.py
+        run: uv run render-dashboard
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
@@ -51,7 +48,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: submodule-status/site
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deployment
