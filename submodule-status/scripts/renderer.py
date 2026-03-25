@@ -82,13 +82,9 @@ def render_dashboard(data_path: str, site_dir: str) -> None:
     sorted_subs = sort_submodules(data["submodules"])
     summary_text = compute_summary(data["submodules"])
 
-    # Compute relative timestamp
-    generated_at_relative = format_relative_time(data["generated_at"])
-
     # Render
     html = template.render(
         generated_at=data["generated_at"],
-        generated_at_relative=generated_at_relative,
         submodules=sorted_subs,
         summary_text=summary_text,
     )

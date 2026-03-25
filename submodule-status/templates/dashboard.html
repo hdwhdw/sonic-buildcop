@@ -214,7 +214,7 @@
         <header>
             <h1>SONiC Submodule Status</h1>
             <p class="description">Staleness tracker for <a href="https://github.com/sonic-net/sonic-buildimage">sonic-net/sonic-buildimage</a></p>
-            <p class="timestamp">Last updated: <time datetime="{{ generated_at }}">{{ generated_at_relative }}</time></p>
+            <p class="timestamp">Last updated: <time id="last-updated" datetime="{{ generated_at }}">{{ generated_at }}</time></p>
             <p class="summary">{{ summary_text }}</p>
             <button class="expand-all-btn" onclick="toggleAll()">Expand All</button>
         </header>
@@ -353,6 +353,31 @@
         </footer>
     </div>
     <script>
+    function formatRelativeTime(isoStr) {
+        var then = new Date(isoStr);
+        var now = new Date();
+        var seconds = Math.floor((now - then) / 1000);
+        if (seconds < 60) return 'just now';
+        var minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return minutes + (minutes === 1 ? ' minute' : ' minutes') + ' ago';
+        var hours = Math.floor(minutes / 60);
+        if (hours < 24) return hours + (hours === 1 ? ' hour' : ' hours') + ' ago';
+        var days = Math.floor(hours / 24);
+        return days + (days === 1 ? ' day' : ' days') + ' ago';
+    }
+    function updateTimestamp() {
+        var el = document.getElementById('last-updated');
+        if (!el) return;
+        var iso = el.getAttribute('datetime');
+        var dt = new Date(iso);
+        var absolute = dt.toLocaleString(undefined, {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
+        });
+        el.textContent = absolute + ' (' + formatRelativeTime(iso) + ')';
+    }
+    updateTimestamp();
+    setInterval(updateTimestamp, 60000);
     function toggleDetail(icon) {
         var row = icon.closest('tr').nextElementSibling;
         var isHidden = row.style.display === 'none';
