@@ -29,10 +29,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Core package is installable via `uv pip install -e ./core` and importable in Python
   3. Submodule-status package declares a dependency on core in its own `pyproject.toml`
   4. Directory structure follows monorepo layout: root workspace config, `core/` with src-layout, `submodule-status/` as deliverable
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] 01-01: TBD
+- [ ] 01-01-PLAN.md — Workspace infrastructure + atomic source/test migration to src-layout
 
 ### Phase 2: Core Foundations
 **Goal**: Core package provides centralized configuration, typed data models, and structured logging that any deliverable can import
