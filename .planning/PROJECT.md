@@ -17,8 +17,8 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 - ✓ Static HTML dashboard rendering via Jinja2 — existing
 - ✓ GitHub Actions scheduled pipeline with GitHub Pages deployment — existing
 - ✓ Retry with backoff and graceful degradation on API errors — existing
-- ✓ Proper Python packaging with pyproject.toml — core as installable package, deliverables depend on it — Phase 1
-- ✓ Monorepo directory structure: core/ package + deliverable dirs (submodule-status/, future tools) — Phase 1
+- ✓ Proper Python packaging with pyproject.toml — libs/apps grouping, flat layout, buildcop_common + buildcop_github + submodule_status — Phase 1
+- ✓ Monorepo directory structure: libs/ (buildcop-common, buildcop-github) + apps/ (submodule-status) — Phase 1
 
 ### Active
 
@@ -36,7 +36,7 @@ An extensible repo structure where adding a new tool/dashboard requires only wri
 
 ## Context
 
-**Current state:** Monorepo with uv workspace — `core/` package (sonic-buildcop-core v0.1.0, skeleton) and `submodule-status/` deliverable with proper src-layout. All existing code migrated to package imports. 122 tests passing. No `sys.path` hacks remain.
+**Current state:** Monorepo with uv workspace using libs/apps grouping — `libs/buildcop-common/` and `libs/buildcop-github/` (skeletons), `apps/submodule-status/` deliverable with flat layout. All existing code migrated to package imports (`submodule_status.*`). 122 tests passing. No `sys.path` hacks remain.
 
 **Tech debt addressed by this refactoring:**
 - Duplicated constants (API_BASE, PARENT_OWNER/REPO_OWNER across 3 files)
