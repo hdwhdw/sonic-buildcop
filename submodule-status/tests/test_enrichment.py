@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from datetime import datetime, timezone
 import requests
 
-from enrichment import (
+from sonic_submodule_status.enrichment import (
     match_pr_to_submodule,
     get_ci_status_for_pr,
     fetch_open_bot_prs,
@@ -124,8 +124,8 @@ def test_ci_status_api_error():
 # ---------------------------------------------------------------------------
 
 
-@patch("enrichment.get_ci_status_for_pr", return_value="pass")
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.get_ci_status_for_pr", return_value="pass")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_fetch_open_bot_prs(mock_sleep, mock_ci, sample_submodule_list, mock_search_open_prs):
     """Two PRs should match two submodules; unavailable submodule gets None."""
     session = MagicMock(spec=requests.Session)
@@ -153,7 +153,7 @@ def test_fetch_open_bot_prs(mock_sleep, mock_ci, sample_submodule_list, mock_sea
     assert sairedis["open_bot_pr"] is None
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_fetch_open_bot_prs_empty(mock_sleep, sample_submodule_list):
     """Empty search response → all submodules get open_bot_pr=None."""
     session = MagicMock(spec=requests.Session)
@@ -167,7 +167,7 @@ def test_fetch_open_bot_prs_empty(mock_sleep, sample_submodule_list):
         assert sub["open_bot_pr"] is None
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_fetch_open_bot_prs_api_error(mock_sleep, sample_submodule_list):
     """Search API error → all submodules get open_bot_pr=None, no crash."""
     session = MagicMock(spec=requests.Session)
@@ -217,7 +217,7 @@ def test_fetch_merged_bot_prs_no_match(sample_submodule_list):
 # ---------------------------------------------------------------------------
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_fetch_latest_repo_commits(mock_sleep, sample_submodule_list, mock_latest_commit_response):
     """OK submodule gets latest_repo_commit with url and date."""
     session = MagicMock(spec=requests.Session)
@@ -233,7 +233,7 @@ def test_fetch_latest_repo_commits(mock_sleep, sample_submodule_list, mock_lates
     assert swss["latest_repo_commit"]["date"] == "2025-02-19T08:00:00Z"
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_fetch_latest_repo_commits_unavailable(mock_sleep, sample_submodule_list, mock_latest_commit_response):
     """Unavailable submodule gets latest_repo_commit=None."""
     session = MagicMock(spec=requests.Session)
@@ -247,7 +247,7 @@ def test_fetch_latest_repo_commits_unavailable(mock_sleep, sample_submodule_list
     assert sairedis["latest_repo_commit"] is None
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_fetch_latest_repo_commits_api_error(mock_sleep):
     """API error → latest_repo_commit=None (no crash)."""
     session = MagicMock(spec=requests.Session)
@@ -276,7 +276,7 @@ def test_fetch_latest_repo_commits_api_error(mock_sleep):
 # ---------------------------------------------------------------------------
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_compute_avg_delay_for_submodule(
     mock_sleep, mock_bump_commits, mock_contents_at_bump, mock_sub_commit_dates
 ):
@@ -303,7 +303,7 @@ def test_compute_avg_delay_for_submodule(
     assert result == 3.0  # mean(2, 3, 4) = 3.0
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_compute_avg_delay_insufficient_bumps(mock_sleep):
     """compute_avg_delay_for_submodule returns None with < 2 bumps."""
     session = MagicMock(spec=requests.Session)
@@ -323,7 +323,7 @@ def test_compute_avg_delay_insufficient_bumps(mock_sleep):
     assert result is None
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_compute_avg_delay_negative_filtered(mock_sleep):
     """Negative delays are filtered out; mean uses only positive values."""
     session = MagicMock(spec=requests.Session)
@@ -361,7 +361,7 @@ def test_compute_avg_delay_negative_filtered(mock_sleep):
     assert result == 3.0  # mean(2, 4) = 3.0, -1 filtered out
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_compute_avg_delay_all_negative(mock_sleep):
     """All delays negative → returns None."""
     session = MagicMock(spec=requests.Session)
@@ -396,7 +396,7 @@ def test_compute_avg_delay_all_negative(mock_sleep):
     assert result is None
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_compute_avg_delay_api_error(mock_sleep):
     """API error during bump history fetch → returns None."""
     session = MagicMock(spec=requests.Session)
@@ -408,7 +408,7 @@ def test_compute_avg_delay_api_error(mock_sleep):
     assert result is None
 
 
-@patch("enrichment.time.sleep")
+@patch("sonic_submodule_status.enrichment.time.sleep")
 def test_compute_avg_delay_skips_unavailable(mock_sleep, sample_submodule_list):
     """compute_avg_delay sets avg_delay_days=None for unavailable submodules."""
     session = MagicMock(spec=requests.Session)
@@ -425,10 +425,10 @@ def test_compute_avg_delay_skips_unavailable(mock_sleep, sample_submodule_list):
     assert sample_submodule_list[0]["avg_delay_days"] is None
 
 
-@patch("enrichment.compute_avg_delay")
-@patch("enrichment.fetch_latest_repo_commits")
-@patch("enrichment.fetch_merged_bot_prs")
-@patch("enrichment.fetch_open_bot_prs")
+@patch("sonic_submodule_status.enrichment.compute_avg_delay")
+@patch("sonic_submodule_status.enrichment.fetch_latest_repo_commits")
+@patch("sonic_submodule_status.enrichment.fetch_merged_bot_prs")
+@patch("sonic_submodule_status.enrichment.fetch_open_bot_prs")
 def test_enrich_with_details(
     mock_open, mock_merged, mock_latest, mock_delay, sample_submodule_list
 ):

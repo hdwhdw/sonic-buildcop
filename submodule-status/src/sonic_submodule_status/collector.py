@@ -8,8 +8,8 @@ from datetime import datetime, timezone
 
 import requests
 
-from staleness import enrich_with_staleness
-from enrichment import enrich_with_details
+from sonic_submodule_status.staleness import enrich_with_staleness
+from sonic_submodule_status.enrichment import enrich_with_details
 
 REPO_OWNER = "sonic-net"
 PARENT_REPO = "sonic-buildimage"

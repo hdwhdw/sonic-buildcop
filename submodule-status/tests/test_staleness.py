@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 import requests
 
-from staleness import (
+from sonic_submodule_status.staleness import (
     get_bump_dates,
     compute_cadence,
     compute_thresholds,
@@ -233,8 +233,8 @@ def test_get_bump_dates_non_list_response():
 # ---------------------------------------------------------------------------
 
 
-@patch("staleness.time.sleep")
-@patch("staleness.get_bump_dates")
+@patch("sonic_submodule_status.staleness.time.sleep")
+@patch("sonic_submodule_status.staleness.get_bump_dates")
 def test_enrich_adds_staleness_fields(mock_get_dates, mock_sleep, sample_submodule_ok):
     """Submodule with status=ok gets staleness fields added via bump dates."""
     base = datetime(2025, 8, 1, 10, 0, 0, tzinfo=timezone.utc)
@@ -252,8 +252,8 @@ def test_enrich_adds_staleness_fields(mock_get_dates, mock_sleep, sample_submodu
     assert "red_days" in sub["thresholds"]
 
 
-@patch("staleness.time.sleep")
-@patch("staleness.get_bump_dates")
+@patch("sonic_submodule_status.staleness.time.sleep")
+@patch("sonic_submodule_status.staleness.get_bump_dates")
 def test_enrich_skips_unavailable(mock_get_dates, mock_sleep, sample_submodule_unavailable):
     """Submodule with status=unavailable gets all staleness fields set to None."""
     submodules = [sample_submodule_unavailable]

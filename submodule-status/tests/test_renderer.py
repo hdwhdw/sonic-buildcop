@@ -2,14 +2,10 @@
 
 import json
 import os
-import sys
 
-# Allow importing from scripts/ directory
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
-
-from renderer import render_dashboard, sort_submodules, compute_summary
+from sonic_submodule_status.renderer import render_dashboard, sort_submodules, compute_summary
 from datetime import datetime, timezone
-from renderer import format_relative_time
+from sonic_submodule_status.renderer import format_relative_time
 
 
 def _make_data(submodules=None, generated_at="2026-03-20T06:00:00Z"):
