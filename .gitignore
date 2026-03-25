@@ -3,7 +3,6 @@ site/
 data.json
 
 # Planning (GSD workflow artifacts)
-.planning/
 
 # Python
 __pycache__/
