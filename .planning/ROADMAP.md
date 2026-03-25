@@ -45,10 +45,11 @@ Plans:
   3. HTTP sessions created through core have timeout defaults applied (30s connect, 60s read)
   4. Core modules use structured `logging` with caught exceptions logged at WARNING — no bare `print()` or silent `None` returns in core
   5. Typed dataclasses (`SubmoduleInfo`, `StalenessResult`, `PRInfo`) are importable from core and pass type-checker validation
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md — Config & data models (constants, env var helper, TypedDicts)
+- [ ] 02-02-PLAN.md — Logging, HTTP session & package wiring (setup_logging, TimeoutHTTPAdapter, __init__.py re-exports)
 
 ### Phase 3: Core API Infrastructure
 **Goal**: Core package provides production-ready GitHub API session management with auth, retry, rate-limit handling, and typed exceptions
